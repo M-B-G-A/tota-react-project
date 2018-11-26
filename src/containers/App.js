@@ -5,6 +5,9 @@ import * as routes from "../constants";
 import Header from "./Header";
 import Footer from "./Footer";
 import Landing from "../components/Landing";
+import Dividend from "../components/dividend/Dividend"
+import Proxy from "../components/proxy/Proxy";
+import Setting from "../components/setting/Setting";
 
 const styles = {
   wrapper: {
@@ -45,6 +48,9 @@ class App extends Component {
             <Switch>
               <Redirect exact from={routes.HOME} to={routes.LANDING} />
               <Route exact strict path={routes.LANDING} component={Landing} />
+              <Route exact strict path={routes.DIVIDEND} component={Dividend} />
+              <Route exact strict path={routes.PROXY} component={Proxy} />
+              <Route exact strict path={routes.SETTING} component={Setting} />
             </Switch>
           </div>
           <div style={styles.footer}>
