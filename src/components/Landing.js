@@ -3,6 +3,7 @@ import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { Doughnut } from "react-chartjs";
 
 const styles = {
   root: {
@@ -21,6 +22,36 @@ const styles = {
   },
 };
 
+const data1 = [
+	{
+		value: 100,
+		color:"#F7464A",
+		highlight: "#FF5A5E",
+		label: "Red"
+	},
+	{
+		value: 80,
+		color: "#46BFBD",
+		highlight: "#5AD3D1",
+		label: "Green"
+	},
+];
+
+const data2 = [
+	{
+		value: 300,
+		color:"#F7464A",
+		highlight: "#FF5A5E",
+		label: "Red"
+	},
+	{
+		value: 50,
+		color: "#46BFBD",
+		highlight: "#5AD3D1",
+		label: "Green"
+	},
+];
+
 const Landing = (props) => {
   return (
     <div style={styles.root}>
@@ -38,30 +69,24 @@ const Landing = (props) => {
         </Row>
         <Row className="show-grid">
           <Col md={6}>
-            <Jumbotron style={{ backgroundColor: 'white' }}>
+            <div style={{ backgroundColor: 'white' }} style={{ textAlign: 'center'}}>
               <h4>Chinese</h4>
-              <p>
-                35,233.212 EOS 위임중
-              </p>
-              <p>
-                <Button bsStyle="primary">
-                  지지하기 & 베팅하기
-                </Button>
-              </p>
-            </Jumbotron>
+              <Doughnut data={data1} options={{ segmentShowStroke: false }} style={{ marginTop: 20, marginBottom: 10 }}/>
+              <h4>35,233.212 EOS 위임중</h4>
+              <Button bsStyle="primary" style={{ marginTop: 10 }}>
+                지지하기 & 베팅하기
+              </Button>
+            </div>
           </Col>
           <Col md={6}>
-            <Jumbotron style={{ backgroundColor: 'white' }}>
-              <h4>America</h4>
-              <p>
-                35,233.212 EOS 위임중
-              </p>
-              <p>
-                <Button bsStyle="primary">
-                  지지하기 & 베팅하기
-                </Button>
-              </p>
-            </Jumbotron>
+          <div style={{ backgroundColor: 'white' }} style={{ textAlign: 'center'}}>
+             <h4>America</h4>
+             <Doughnut data={data2} options={{ segmentShowStroke: false }} style={{ marginTop: 20, marginBottom: 10 }}/>
+              <h4>35,233.212 EOS 위임중</h4>
+              <Button bsStyle="primary" style={{ marginTop: 10, marginBottom: 10 }}>
+                지지하기 & 베팅하기
+              </Button>
+            </div>
           </Col>
         </Row>
         <Row className="show-grid">
