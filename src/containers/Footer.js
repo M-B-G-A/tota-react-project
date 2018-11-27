@@ -12,11 +12,9 @@ class Footer extends Component {
   render() {
     return (
       <Navbar staticTop={true} fixedBottom={true}>
-        <Navbar.Header>
-          <Navbar.Brand>
-            copyright.
-          </Navbar.Brand>
-        </Navbar.Header>
+        <Nav pullRight>
+            Copyright ⓒ Tota. All rights reserved.
+        </Nav>
       </Navbar>
     );
   }
