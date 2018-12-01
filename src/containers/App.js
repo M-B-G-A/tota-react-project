@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import * as routes from "../constants";
 import Header from "./Header";
 import Footer from "./Footer";
-import Landing from "../components/Landing";
+import Landing from "../components/home/Landing";
 import Dividend from "../components/dividend/Dividend"
 import Proxy from "../components/proxy/Proxy";
 import Setting from "../components/setting/Setting";

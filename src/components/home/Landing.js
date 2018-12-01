@@ -5,10 +5,11 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import { Doughnut } from "react-chartjs";
-import { eos } from "../apis/eos";
-import DateUtil from "../utils/DateUtil";
+import { eos } from "../../apis/eos";
+import DateUtil from "../../utils/DateUtil";
+import BettingDialog from "./BettingDialog";
 
-import * as appActions from "../reducers/app";
+import * as appActions from "../../reducers/app";
 
 const styles = {
   root: {
@@ -43,11 +44,17 @@ const data1 = [
 ];
 
 class Landing extends Component {
-
-
   componentDidMount() {
     eos.getTableRows(true, "totagamelist", "totagamelist", "games2", "key").then((res) => {
       this.props.appActions.setGames(res.rows);
+    });
+
+    this.props.proxies.map((item) => {
+      eos.getAccount(item.account).then(res => {
+        const lastVoteWeight = res["voter_info"]["last_vote_weight"];
+        const delegated = lastVoteWeight / Math.pow(2, Math.round((new Date().getTime()/1000 - 946684800)/(24 * 3600 * 7)) / 52) / 10000
+        this.props.appActions.setProxyInfo({ account: item.account, delegated: delegated, producers: res["voter_info"]['producers'] })
+      })
     });
   }
 
@@ -62,11 +69,13 @@ class Landing extends Component {
   }
 
   printTotalAmount = (teamAsset1, teamAsset2) => {
-    console.log(teamAsset1);
-    console.log(teamAsset1.split(" "));
     const amount1 = teamAsset1.split(" ")[0] * 1;
     const amount2 = teamAsset2.split(" ")[0] * 1;
     return (amount1 + amount2) + " EOS";
+  }
+
+  openBettingDialog = (open) => {
+    this.props.appActions.openBettingDialog(open);
   }
 
   render() {
@@ -90,10 +99,10 @@ class Landing extends Component {
             this.props.proxies.map((item, index) =>
               <Col md={6} key={index}>
                 <div style={{ backgroundColor: 'white' }} style={{ textAlign: 'center'}}>
-                  <h4>{item.name}</h4>
+                  <h4>{ item.icon } { item.name }</h4>
                   <Doughnut data={data1} options={{ segmentShowStroke: false }} style={{ marginTop: 20, marginBottom: 10 }}/>
-                  <h4>35,233.212 EOS 위임중</h4>
-                  <Button bsStyle="primary" style={{ marginTop: 10 }}>
+                  <h4>{ item.delegated } EOS 위임중</h4>
+                  <Button bsStyle="primary" style={{ marginTop: 10 }} onClick={() => this.openBettingDialog(true)}>
                     지지하기 & 베팅하기
                   </Button>
                 </div>
@@ -129,6 +138,13 @@ class Landing extends Component {
           </Table>
           </Row>
         </Grid>
+        <BettingDialog
+          isOpenBettingDialog={this.props.isOpenBettingDialog}
+          openBettingDialog={this.openBettingDialog}
+          account={this.props.account}
+          accountInfo={this.props.accountInfo}
+          proxies={this.props.proxies}
+        />
       </div>
     );
   }
@@ -137,6 +153,9 @@ class Landing extends Component {
 const mapStateToProps = state => ({
   proxies: state.app.proxies,
   games: state.app.games,
+  account: state.app.account,
+  isOpenBettingDialog: state.app.isOpenBettingDialog,
+  accountInfo: state.app.accountInfo,
 });
 
 const mapDispatchToProps = dispatch => ({

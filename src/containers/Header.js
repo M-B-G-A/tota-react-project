@@ -9,7 +9,7 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 import * as appActions from "../reducers/app";
 import * as routes from "../constants";
 import { scatterNetwork } from "../apis/scatter";
-
+import { eos } from "../apis/eos";
 
 const styles = {
   content: {
@@ -33,6 +33,11 @@ class Header extends Component {
         const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
         console.log(account);
         this.props.appActions.setUserAccount(account);
+        localStorage.setItem('account', account);
+
+        eos.getAccount(account.name).then(res => {
+          this.props.appActions.setUserAccountInfo(res);
+        })
       }).catch(error => {
         console.error(error);
       });

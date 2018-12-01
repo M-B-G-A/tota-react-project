@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "binaryen": "^37.0.0",
     "bootstrap": "3",
     "chart.js": "^1.1.1",
+    "eosjs": "^16.0.9",
     "eosjs-api": "^7.0.4",
     "firebase": "^5.2.0",
     "formik": "^1.0.1",
