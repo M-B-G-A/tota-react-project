@@ -5,6 +5,7 @@
   "dependencies": {
     "bootstrap": "3",
     "chart.js": "^1.1.1",
+    "eosjs-api": "^7.0.4",
     "firebase": "^5.2.0",
     "formik": "^1.0.1",
     "history": "^4.7.2",
