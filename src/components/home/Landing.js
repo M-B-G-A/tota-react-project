@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import { Doughnut } from "react-chartjs";
 import { eos } from "../../apis/eos";
-import DateUtil from "../../utils/DateUtil";
+import { CommonUtil, DateUtil } from "../../utils";
 import BettingDialog from "./BettingDialog";
 
 import * as appActions from "../../reducers/app";
@@ -45,15 +45,17 @@ const data1 = [
 
 class Landing extends Component {
   componentDidMount() {
-    eos.getTableRows(true, "totagamelist", "totagamelist", "games2", "key").then((res) => {
+    eos.getTableRows({"scope":"totatestgame","code":"totatestgame","table":"games2","json":true,"reverse":true}).then((res) => {
       this.props.appActions.setGames(res.rows);
+      // 현재 진행중인 게임 회차
+      this.props.appActions.setCurrentGame(res.rows[0]["key"]);
     });
 
     this.props.proxies.map((item) => {
       eos.getAccount(item.account).then(res => {
         const lastVoteWeight = res["voter_info"]["last_vote_weight"];
         const delegated = lastVoteWeight / Math.pow(2, Math.round((new Date().getTime()/1000 - 946684800)/(24 * 3600 * 7)) / 52) / 10000
-        this.props.appActions.setProxyInfo({ account: item.account, delegated: delegated, producers: res["voter_info"]['producers'] })
+        this.props.appActions.setProxyInfo({ account: item.account, icon: item.icon, delegated: delegated, producers: res["voter_info"]['producers'] })
       })
     });
   }
@@ -68,12 +70,6 @@ class Landing extends Component {
     }
   }
 
-  printTotalAmount = (teamAsset1, teamAsset2) => {
-    const amount1 = teamAsset1.split(" ")[0] * 1;
-    const amount2 = teamAsset2.split(" ")[0] * 1;
-    return (amount1 + amount2) + " EOS";
-  }
-
   openBettingDialog = (open) => {
     this.props.appActions.openBettingDialog(open);
   }
@@ -83,7 +79,7 @@ class Landing extends Component {
       <div style={styles.root}>
         <Grid>
           <Row className="show-grid" style={styles.row}>
-            74회차 종료까지
+            { this.props.currentGame + 1 } 회차 종료까지
           </Row>
           <Row className="show-grid" style={styles.row}>
             <h3>17시간 20분 22초</h3>
@@ -91,6 +87,18 @@ class Landing extends Component {
           <Row className="show-grid">
             <Col>
               <ProgressBar now={60} />
+            </Col>
+          </Row>
+          <Row className="show-grid" style={styles.row}>
+            <Col>
+              <h3>이번 라운드 베팅 
+                <b>
+                {
+                  this.props.games.length === 0 ? null :
+                  CommonUtil.printTotalGameAmount(this.props.games[0]["team1_asset"], this.props.games[0]["team2_asset"])
+                }
+                </b>
+              </h3>
             </Col>
           </Row>
           { /* Proxy Information */ }
@@ -130,7 +138,7 @@ class Landing extends Component {
                   <td>
                     { this.printGameResult(item["result"]) }
                   </td>
-                  <td>{ this.printTotalAmount(item["team1_asset"], item["team2_asset"]) }</td>
+                  <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
                 </tr>
               )
             }
@@ -144,6 +152,7 @@ class Landing extends Component {
           account={this.props.account}
           accountInfo={this.props.accountInfo}
           proxies={this.props.proxies}
+          currentGame={this.props.currentGame}
         />
       </div>
     );
@@ -156,6 +165,7 @@ const mapStateToProps = state => ({
   account: state.app.account,
   isOpenBettingDialog: state.app.isOpenBettingDialog,
   accountInfo: state.app.accountInfo,
+  currentGame: state.app.currentGame,
 });
 
 const mapDispatchToProps = dispatch => ({

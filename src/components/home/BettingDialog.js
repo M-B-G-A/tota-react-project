@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 // import Eos from "eosjs";
 // import binaryen from "binaryen";
 import { eosJS } from "../../apis/eos";
+import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
+import Eos from "eosjs";
+import { scatterNetwork } from "../../apis/scatter";
+import { CommonUtil } from "../../utils";
 /* Betting Dialog */
 class BettingDialog extends Component {
   constructor(props) {
@@ -25,22 +29,18 @@ class BettingDialog extends Component {
   }
 
   onBettingButtonClicked = () => {
-    console.log('hu');
-  //cleos push action totagamelist insertcoin '["hakyungzzang", "10.0000 EOS", 4, 2]' -p hakyungzzang@active
-    // const eos = Eos({"", binaryen});
-    // const options = {
-    //   authorization: this.props.account.name + '@active',
-    //   broadcast: true,
-    //   sign: true
-    // }
-
-    const options = { authorization: [`${this.props.account.name}@${this.props.account.authority}`] }
-
-    const eos = ScatterEOS({ httpEndpoint:'https://jungle2.cryptolions.io:443', signatureProvider:scatter.eosHook(network) })
-
-    eos.contract('totagamelist', options).then(myaccount => {
-      console.log(myaccount);
-      myaccount.insertcoin("hakyungzzang", "1.0000 EOS", 4, 2);
+    ScatterJS.plugins(new ScatterEOS());
+    const scatter = ScatterJS.scatter;
+    const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
+    eos.contract('totatestgame').then(myaccount => {
+      myaccount.insertcoin(this.props.account.name, CommonUtil.zero4(this.state.inputText) + " EOS", this.props.currentGame, this.props.accountInfo["voter_info"]["proxy"]).then(res => {
+        console.log('result', res);
+        // if (res["error"] !== null) {
+        // } else {
+        //   console.log(res["message"]);
+        // }
+      });
+      this.props.openBettingDialog(false);
     });
   }
 
@@ -50,7 +50,7 @@ class BettingDialog extends Component {
         <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
           <Modal.Header closeButton>
             <Modal.Title>
-              74회차 라운드 베팅하기
+              { this.props.currentGame + 1 } 라운드 베팅하기
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>

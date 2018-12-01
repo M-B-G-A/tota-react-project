@@ -5,9 +5,9 @@ import * as routes from "../constants";
 import Header from "./Header";
 import Footer from "./Footer";
 import Landing from "../components/home/Landing";
-import Dividend from "../components/dividend/Dividend"
+import MyBet from "../components/myBet/MyBet"
 import Proxy from "../components/proxy/Proxy";
-import Setting from "../components/setting/Setting";
+import Info from "../components/info/Info";
 
 const styles = {
   wrapper: {
@@ -32,7 +32,7 @@ const styles = {
   footer: {
     display: 'table-row',
     width: '100%',
-    height: '60px',
+    height: '100px',
   }
 }
 
@@ -48,9 +48,9 @@ class App extends Component {
             <Switch>
               <Redirect exact from={routes.HOME} to={routes.LANDING} />
               <Route exact strict path={routes.LANDING} component={Landing} />
-              <Route exact strict path={routes.DIVIDEND} component={Dividend} />
+              <Route exact strict path={routes.MYBET} component={MyBet} />
               <Route exact strict path={routes.PROXY} component={Proxy} />
-              <Route exact strict path={routes.SETTING} component={Setting} />
+              <Route exact strict path={routes.INFO} component={Info} />
             </Switch>
           </div>
           <div style={styles.footer}>

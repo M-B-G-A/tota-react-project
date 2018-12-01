@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import * as appActions from "../../reducers/app";
-import List from "../dividend/List";
+import List from "../myBet/List";
 import { eos } from "../../apis/eos";
 
 const styles = {
@@ -24,14 +24,14 @@ const styles = {
   },
 };
 
-class Dividend extends Component {
+class MyBet extends Component {
   componentDidMount() {
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.account !== nextProps.account) {
-      eos.getTableRows(true, "totagamelist", "totagamelist", "games2").then((games) => {
-        eos.getTableRows(true, "totagamelist", "totagamelist", "histories2").then((res) => {
+      eos.getTableRows(true, "totatestgame", "totatestgame", "games2").then((games) => {
+        eos.getTableRows(true, "totatestgame", "totatestgame", "histories2").then((res) => {
           let list = res.rows.filter(item => item.user === nextProps.account.name);
           this.getDividendList(games.rows, list);
         });
@@ -45,7 +45,7 @@ class Dividend extends Component {
       const dividend = dividendList[i]
       const game = games.filter(item => item.key === dividend["game_key"])[0];
       dividend["game"] = game;
-      newList.push(dividend);
+      newList.push( );
     }
     this.props.appActions.setDividendList(newList);
   }
@@ -80,4 +80,4 @@ const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(appActions, dispatch),
 });
 
-export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Dividend);
+export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(MyBet);

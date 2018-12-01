@@ -29,6 +29,10 @@ class Header extends Component {
       if(!connected) return false;
       const scatter = ScatterJS.scatter;
       const requiredFields = { accounts:[scatterNetwork] };
+
+
+
+
       scatter.getIdentity(requiredFields).then(() => {
         const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
         console.log(account);
@@ -48,12 +52,12 @@ class Header extends Component {
     switch(route) {
       case routes.LANDING:
         return this.props.history.push(routes.HOME);
-      case routes.DIVIDEND:
-        return this.props.history.push(routes.DIVIDEND);
+      case routes.MYBET:
+        return this.props.history.push(routes.MYBET);
       case routes.PROXY:
         return this.props.history.push(routes.PROXY);
-      case routes.SETTING:
-        return this.props.history.push(routes.SETTING);
+      case routes.INFO:
+        return this.props.history.push(routes.INFO);
     }
   };
 
@@ -63,24 +67,24 @@ class Header extends Component {
         <Navbar.Header>
           <Navbar.Brand>
             <div onClick={() => this.onNavItemClicked(routes.LANDING)}>
-              <b>ToTa</b>
+              <img src= { process.env.PUBLIC_URL + "Logo_line.png" } alt="" style={{ width: 80, height: 20 }} />
             </div>
           </Navbar.Brand>
           <Nav>
             <NavItem onClick={() => this.onNavItemClicked(routes.PROXY)}>
               PROXY
             </NavItem>
-            <NavItem onClick={() => this.onNavItemClicked(routes.DIVIDEND)}>
-              나의 배당
+            <NavItem onClick={() => this.onNavItemClicked(routes.MYBET)}>
+              My bet
             </NavItem>
-            <NavItem onClick={() => this.onNavItemClicked(routes.SETTING)}>
-              나의 설정
+            <NavItem onClick={() => this.onNavItemClicked(routes.INFO)}>
+              Info
             </NavItem>
           </Nav>
         </Navbar.Header>
         <Nav pullRight style={{ display: 'table-cell' }}>
          <NavItem>
-          { this.props.account === null ? "로그인 필요" : this.props.account.name }
+           <u>{ this.props.account === null ? "로그인 필요" : this.props.account.name }</u>
          </NavItem>
         </Nav>
       </Navbar>

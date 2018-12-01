@@ -9,15 +9,17 @@ const ACTION_SET_GAMES = "app/ACTION_SET_GAMES";
 const ACTION_SET_PROXY_INFO = "app/ACTION_SET_PROXY_INFO";
 const ACTION_SET_DIVIDEND_LIST = "app/ACTION_SET_DIVIDEND_LIST";
 const ACTION_OPEN_BETTING_DIALOG = "app/ACTION_OPEN_BETTING_DIALOG";
+const ACTION_SET_CURRENT_GAME= "app/ACTION_SET_CURRENT_GAME";
 // ================================================================
 // Action Creator
 // ================================================================
 export const setUserAccount = createAction(ACTION_SET_USER_ACCOUNT, account => account);
 export const setUserAccountInfo = createAction(ACTION_SET_USER_ACCOUNT_INFO, accountInfo => accountInfo);
 export const setGames = createAction(ACTION_SET_GAMES, games => games);
-export const setProxyInfo = createAction(ACTION_SET_PROXY_INFO, ({ account, delegated, producers }) => ({ account, delegated, producers }))
+export const setProxyInfo = createAction(ACTION_SET_PROXY_INFO, ({ account, delegated, producers, icon }) => ({ account, delegated, producers, icon }))
 export const setDividendList = createAction(ACTION_SET_DIVIDEND_LIST, list => list);
 export const openBettingDialog = createAction(ACTION_OPEN_BETTING_DIALOG, open => open);
+export const setCurrentGame = createAction(ACTION_SET_CURRENT_GAME, game => game);
 
 // initial state
 const initialState = {
@@ -39,6 +41,7 @@ const initialState = {
       producers: [],
     }
   ],
+  currentGame: null,
   games: [],
   dividendList: [], // 나의 배당 내역
   isOpenBettingDialog: false,
@@ -64,6 +67,7 @@ const appReducer = handleActions({
       account: proxy.account,
       delegated: payload.delegated,
       producers: payload.producers,
+      icon: payload.icon,
     } : proxy)
   }),
   [ACTION_SET_DIVIDEND_LIST]: (state, { payload: list }) => ({
@@ -73,6 +77,10 @@ const appReducer = handleActions({
   [ACTION_OPEN_BETTING_DIALOG]: (state, { payload: open }) => ({
     ...state,
     isOpenBettingDialog: open
+  }),
+  [ACTION_SET_CURRENT_GAME]: (state, { payload: currentGame }) => ({
+    ...state,
+    currentGame: currentGame
   }),
 }, initialState);
 

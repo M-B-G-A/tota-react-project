@@ -1,6 +1,6 @@
 /* routes */
 export const HOME = "/";
 export const LANDING = "/landing";
-export const DIVIDEND = "/dividend";
+export const MYBET = "/myBet";
 export const PROXY = "/proxy";
-export const SETTING = "/setting";
+export const INFO = "/info";

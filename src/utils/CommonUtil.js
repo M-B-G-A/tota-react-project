@@ -12,6 +12,13 @@ class CommonUtil {
       return proxies[result - 1].name;
     }
   }
+
+  static zero4 = (amount) => {
+    let str = Math.round(amount * 10000) + '';
+    const position = str.length - 4;
+    const output = [str.slice(0, position), '.', str.slice(position)].join('');
+    return output;
+  }
 }
 
 export default CommonUtil;
