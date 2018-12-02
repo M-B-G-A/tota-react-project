@@ -8,6 +8,7 @@ import Landing from "../components/home/Landing";
 import MyBet from "../components/myBet/MyBet"
 import Proxy from "../components/proxy/Proxy";
 import Info from "../components/info/Info";
+import Error from "../components/Error";
 
 const styles = {
   wrapper: {
@@ -51,6 +52,7 @@ class App extends Component {
               <Route exact strict path={routes.MYBET} component={MyBet} />
               <Route exact strict path={routes.PROXY} component={Proxy} />
               <Route exact strict path={routes.INFO} component={Info} />
+              <Route component={Error} />
             </Switch>
           </div>
           <div style={styles.footer}>
