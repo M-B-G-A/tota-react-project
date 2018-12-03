@@ -87,7 +87,9 @@ class Landing extends Component {
   }
 
   openBettingDialog = (open) => {
-    this.props.appActions.openBettingDialog(open);
+    if (this.props.proxy !== null) {
+      this.props.appActions.openBettingDialog(open);
+    }
   }
 
   render() {
@@ -132,7 +134,7 @@ class Landing extends Component {
                     </div>
                   </div>
                   <h4>{ proxy.delegated } EOS 위임중</h4>
-                  <Button bsStyle="primary" style={{ marginTop: 10 }} onClick={() => this.openBettingDialog(true)}>
+                  <Button bsStyle="info" bsSize="large" style={{ marginTop: 10 }} onClick={() => this.openBettingDialog(true)}>
                     지지하기 & 베팅하기
                   </Button>
                 </div>
@@ -174,6 +176,7 @@ class Landing extends Component {
           account={this.props.account}
           accountInfo={this.props.accountInfo}
           proxies={this.props.proxies}
+          proxy={this.props.proxy}
           currentGame={this.props.currentGame}
         />
       </div>
@@ -189,6 +192,7 @@ const mapStateToProps = state => ({
   accountInfo: state.app.accountInfo,
   currentGame: state.app.currentGame,
   remainingTime: state.app.remainingTime,
+  proxy: state.proxy.proxy,
 });
 
 const mapDispatchToProps = dispatch => ({

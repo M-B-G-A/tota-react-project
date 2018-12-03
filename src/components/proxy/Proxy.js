@@ -8,6 +8,8 @@ import * as appActions from "../../reducers/app";
 import * as proxyActions from "../../reducers/proxy";
 import { eosMainnet } from "../../apis/eos";
 import * as routes from "../../constants";
+import { firebase } from "../../apis/firebase";
+
 const styles = {
   root: {
     width: '80%',
@@ -36,8 +38,28 @@ class Proxy extends Component {
     }
     // Proxy의 BP들은 Mainnet에서 가져온다.
     eosMainnet.getAccount(this.props.proxy.account).then(res => {
-      this.props.proxyActions.setProxyProducers(res["voter_info"]["producers"]);
+      const producers = res["voter_info"]["producers"];
+      const array = [];
+      for (let i in producers) {
+        array.push({ name: producers[i], image: null })
+      }
+      this.props.proxyActions.setProxyProducers(array);
     })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.producer !== nextProps.producers) {
+      nextProps.producers.map(producer => {
+        if (producer.image === null) {
+          firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.png`).getDownloadURL().then((url) => {
+            this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
+          }).catch((error) => {
+            console.error(error);
+            this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
+          })
+        }
+      });
+    }
   }
 
   render() {
@@ -67,13 +89,13 @@ class Proxy extends Component {
             프록시의 투표 리스트
           </Row>
             {
-              this.props.producers.map((item, index) =>
+              this.props.producers.map((producer, index) =>
                 <Col xs={6} sm={6} md={4} lg={4} key={index}>
-                  {/* <Thumbnail src={ process.env.PUBLIC_URL + "Logo_line.png" } alt="200x200" style={{ textAlign: 'center', backgroundColor: '#F8F8F8' }}> */}
+                  <Thumbnail src={ producer.image } alt="200x200" style={{ textAlign: 'center', backgroundColor: '#F8F8F8' }}>
                     <h2 style={{ fontSize: '2vw' }}>
-                      { item }
+                      { producer.name }
                     </h2>
-                  {/* </Thumbnail> */}
+                  </Thumbnail>
                 </Col>
               )
             }
@@ -82,9 +104,9 @@ class Proxy extends Component {
           <Row style={{ paddingBottom: 30 }}>
             {this.props.currentGame + 1} 회차 나의 배팅 내역
           </Row>
-          <Row style={{ paddingBottom: 30 }}>
+          {/* <Row style={{ paddingBottom: 30 }}>
             최근 회차별 승률
-          </Row>
+          </Row> */}
         </Grid>
       </div>
     );

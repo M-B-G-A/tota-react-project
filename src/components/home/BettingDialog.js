@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Button, Form, FormGroup, FormControl, HelpBlock } from "react-bootstrap";
+import { Modal, Button, Form, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
 import { connect } from "react-redux";
 // import Eos from "eosjs";
 // import binaryen from "binaryen";
@@ -45,6 +45,7 @@ class BettingDialog extends Component {
   }
 
   render() {
+    if (this.props.proxy === null) { return null }
     return (
       <div>
         <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
@@ -54,23 +55,29 @@ class BettingDialog extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            나의 지지 프록시 : { this.props.accountInfo === null ? null : (this.props.proxies.filter(item => item.account === this.props.accountInfo["voter_info"]["proxy"])[0].name) }
-            <Form>
+            <div style={{ width:'100%', textAlign: 'center' }}>
+              나의 지지 프록시 : { this.props.proxy.name }
+            </div>
+            <Form inline style={{ marginTop: 20, padding: 10, textAlign: 'center' }}>
               <FormGroup
                 controlId="formBasicText"
               >
+                <ControlLabel>{ this.props.proxy.name }{' '}에 베팅하기</ControlLabel>{' '}
                 <FormControl
                   type="text"
                   value={this.state.inputText}
-                  placeholder="Enter text"
+                  placeholder="Enter Amount"
                   onChange={this.handleChange}
+                  style={{ marginRight: 10, marginLeft: 10, border: 'none', boxShadow: 'none', borderBottom: 'solid 1px #979797', borderRadius: '0' }}
                 />
+                {' '}<ControlLabel>EOS</ControlLabel>
               </FormGroup>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button
-              bsStyle="primary"
+              bsStyle="info"
+              bsSize="large"
               onClick={() => this.onBettingButtonClicked()}
             >
               베팅하기
