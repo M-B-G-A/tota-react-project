@@ -18,7 +18,7 @@ const ACTION_UPDATE_REMAINING_TIME = "app/ACTION_UPDATE_REMAINING_TIME";
 export const setUserAccount = createAction(ACTION_SET_USER_ACCOUNT, account => account);
 export const setUserAccountInfo = createAction(ACTION_SET_USER_ACCOUNT_INFO, accountInfo => accountInfo);
 export const setGames = createAction(ACTION_SET_GAMES, games => games);
-export const setProxyInfo = createAction(ACTION_SET_PROXY_INFO, ({ account, delegated, producers, icon, winningAvg }) => ({ account, delegated, producers, icon, winningAvg }))
+export const setProxyInfo = createAction(ACTION_SET_PROXY_INFO, ({ account, delegated, producers, icon, winningAvg, dividendRate }) => ({ account, delegated, producers, icon, winningAvg, dividendRate }))
 export const setDividendList = createAction(ACTION_SET_DIVIDEND_LIST, list => list);
 export const openBettingDialog = createAction(ACTION_OPEN_BETTING_DIALOG, open => open);
 export const setCurrentGame = createAction(ACTION_SET_CURRENT_GAME, game => game);
@@ -37,6 +37,7 @@ const initialState = {
       delegated: 0.0,
       winningAvg: 0,
       producers: [],
+      dividendRate: 0.0,
     },
     {
       name: "West",
@@ -45,6 +46,7 @@ const initialState = {
       delegated: 0.0,
       winningAvg: 0,
       producers: [],
+      dividendRate: 0.0,
     }
   ],
   currentGame: null,
@@ -75,6 +77,7 @@ const appReducer = handleActions({
       icon: proxy.icon,
       winningAvg: payload.winningAvg,
       delegated: payload.delegated,
+      dividendRate: payload.dividendRate,
       producers: payload.producers,
     } : proxy)
   }),
@@ -86,6 +89,7 @@ const appReducer = handleActions({
       icon: proxy.icon,
       winningAvg: proxy.winningAvg,
       delegated: proxy.delegated,
+      dividendRate: proxy.dividendRate,
       producers: payload.producers,
     } : proxy)
   }),

@@ -53,6 +53,8 @@ class Landing extends Component {
       this.props.appActions.setCurrentGame(games[0]["key"]);
       const totalGameCount = games.length; // 총 게임 수
       this.props.proxies.map((item, index) => {
+        // 현재 게임 예상 배당률
+        const dividendRate = CommonUtil.getDividendRate(index, games[0]['team1_asset'], games[0]['team2_asset'])
         // Proxy 승률
         const winGameCount = games.filter(game => game["result"] === (index + 1)).length;
         const drawGameCount = games.filter(game => game["result"] === 3).length;
@@ -61,7 +63,7 @@ class Landing extends Component {
         eos.getAccount(item.account).then(res => {
           const lastVoteWeight = res["voter_info"]["last_vote_weight"];
           const delegated = lastVoteWeight / Math.pow(2, Math.round((new Date().getTime() / 1000 - 946684800)/(24 * 3600 * 7)) / 52) / 10000
-          this.props.appActions.setProxyInfo({ account: item.account, icon: item.icon, delegated: delegated, producers: res["voter_info"]['producers'], winningAvg: winningAvg })
+          this.props.appActions.setProxyInfo({ account: item.account, icon: item.icon, delegated: delegated, producers: res["voter_info"]['producers'], winningAvg: winningAvg, dividendRate: dividendRate })
         })
       });
     });
@@ -102,7 +104,7 @@ class Landing extends Component {
           <Row className="show-grid" style={styles.row}>
             <h3>{ this.printRemainingTime() }</h3>
           </Row>
-          <Row className="show-grid">
+          <Row className="show-grid" style={{ paddingRight: 150, paddingLeft: 150 }}>
             <Col>
               <ProgressBar bsStyle="info" active now={86400 - this.props.remainingTime} max={86400} />
             </Col>
@@ -120,8 +122,9 @@ class Landing extends Component {
               </h3>
             </Col>
           </Row>
+          <hr />
           { /* Proxy Information */ }
-          <Row className="show-grid">
+          <Row className="show-grid" style={{ marginBottom: 50 }}>
           {
             this.props.proxies.map((proxy, index) =>
               <Col md={6} key={index}>
@@ -134,17 +137,18 @@ class Landing extends Component {
                     </div>
                   </div>
                   <h4>{ proxy.delegated } EOS 위임중</h4>
-                  <Button bsStyle="info" bsSize="large" style={{ marginTop: 10 }} onClick={() => this.openBettingDialog(true)}>
-                    지지하기 & 베팅하기
+                  <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.openBettingDialog(true)}>
+                    베팅하기
                   </Button>
+                  <div>승리시 { proxy.dividendRate } 배 획득 예상</div>
                 </div>
               </Col>
             )
           }
           </Row>
+          <hr />
           { /* Game Histories */ }
           <Row className="show-grid">
-          <hr />
           <div style={{ marginTop: 30, marginBottom: 30 }}>
             <h4>이전회차 결과</h4>
           </div>

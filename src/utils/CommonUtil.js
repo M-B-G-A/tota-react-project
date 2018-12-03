@@ -1,8 +1,28 @@
 class CommonUtil {
   static printTotalGameAmount = (teamAsset1, teamAsset2) => {
-    const amount1 = teamAsset1.split(" ")[0] * 1;
-    const amount2 = teamAsset2.split(" ")[0] * 1;
+    const amount1 = teamAsset1.split(" ")[0] * 1.0;
+    const amount2 = teamAsset2.split(" ")[0] * 1.0;
     return (amount1 + amount2);
+  }
+
+  static getAmount = (asset) => {
+    return asset.split(" ")[0] * 1.0;
+  }
+
+  static getDividendRate = (team, teamAsset1, teamAsset2) => {
+    const teamAmount1 = CommonUtil.getAmount(teamAsset1);
+    const teamAmount2 = CommonUtil.getAmount(teamAsset2);
+    if (team === 0) {
+      if (teamAmount1 === 0) {
+        return "-"
+      }
+      return 0.999 * (teamAmount1 + teamAmount2) / teamAmount1
+    } else if (team === 1) {
+      if (teamAmount2 === 0) {
+        return "-"
+      }
+      return 0.999 * (teamAmount1 + teamAmount2) / teamAmount2
+    }
   }
 
   static printGameResult = (proxies, result) => {

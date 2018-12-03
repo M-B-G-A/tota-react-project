@@ -45,21 +45,40 @@ class Proxy extends Component {
       }
       this.props.proxyActions.setProxyProducers(array);
     })
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.producer !== nextProps.producers) {
-      nextProps.producers.map(producer => {
-        if (producer.image === null) {
+    const timer = setInterval(() => {
+      if (this.props.producers.length !== 0) {
+        clearInterval(timer)
+        this.props.producers.map(producer => {
           firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.png`).getDownloadURL().then((url) => {
             this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
           }).catch((error) => {
-            console.error(error);
-            this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
-          })
-        }
-      });
-    }
+            firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.jpg`).getDownloadURL().then((url) => {
+              this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
+            }).catch((error) => {
+              console.error(error);
+              this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
+            });
+          });
+        });
+      }
+    }, 1000);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // TODO: 수정하기
+    // if (this.props.producer !== nextProps.producers) {
+    //   nextProps.producers.map(producer => {
+    //     if (producer.image === null) {
+    //       firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.png`).getDownloadURL().then((url) => {
+    //         this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
+    //       }).catch((error) => {
+    //         console.error(error);
+    //         this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
+    //       })
+    //     }
+    //   });
+    // }
   }
 
   render() {
@@ -77,7 +96,7 @@ class Proxy extends Component {
               </h3>
             </Col>
             <Col md={6} style={{ textAlign: 'right' }}>
-              <h3>총 {this.props.proxy.delegated}</h3>
+              <h3>총 {this.props.proxy.delegated}{' '}EOS</h3>
               <h3>
                위임 중
               </h3>
@@ -86,23 +105,39 @@ class Proxy extends Component {
           <Row>
           <hr />
           <Row style={{ paddingBottom: 30 }}>
-            프록시의 투표 리스트
+            <Col md={6}>
+              <h3>프록시의 투표 리스트</h3>
+            </Col>
           </Row>
             {
               this.props.producers.map((producer, index) =>
-                <Col xs={6} sm={6} md={4} lg={4} key={index}>
-                  <Thumbnail src={ producer.image } alt="200x200" style={{ textAlign: 'center', backgroundColor: '#F8F8F8' }}>
-                    <h2 style={{ fontSize: '2vw' }}>
+                <Col xs={4} sm={4} md={2} lg={2} key={index} style={{ marginBottom: 50 }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ width: 100, height: 100, textAlign: 'center', display: 'inline-block', marginBottom: 30 }}>
+                      <img src={ producer.image } alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                    <div style={{ width: '100%', textAlign: 'center' }}>
                       { producer.name }
-                    </h2>
-                  </Thumbnail>
+                    </div>
+                  </div>
                 </Col>
               )
             }
           </Row>
           <hr />
           <Row style={{ paddingBottom: 30 }}>
-            {this.props.currentGame + 1} 회차 나의 배팅 내역
+            <Col md={6}>
+              <h3>{this.props.currentGame + 1} 회차 나의 배팅 내역</h3>
+            </Col>
+            <Col md={6} style={{ textAlign: 'right' }}>
+              <h3>총 0{' '}EOS</h3>
+            </Col>
+          </Row>
+          <Row style={{ paddingBottom: 30 }}>
+            <Col md={6}>
+              <p>배팅 기록은 회차의 시작지점을 기점으로 시간을 기록합니다. 모든 회차는 23시간 안에 종료됩니다.</p>
+              <p>23 : 00 : 00 이 되는 시점에는 베팅기록이 모두 청산되며 나의 배당내역에서 해당 회차의 배당을 받을 수 있습니다.</p>
+            </Col>
           </Row>
           {/* <Row style={{ paddingBottom: 30 }}>
             최근 회차별 승률
