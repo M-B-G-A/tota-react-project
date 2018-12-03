@@ -2,13 +2,15 @@ import EosApi from "eosjs-api";
 import Eos from "eosjs";
 
 const prodOptions = {
-  httpEndpoint: "http://127.0.0.1:8888", // default, null for cold-storage
+  httpEndpoint: "https://rpc.eosys.io", // default, null for cold-storage
+  chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
   verbose: false, // API logging
   logger: { // Default logging functions
     // log: console.log,
     error: console.error,
   },
   fetchConfiguration: {},
+  broadcast: true,
 }
 
 const devOptions = {
@@ -26,4 +28,6 @@ const config = process.env.NODE_ENV === "production" ? prodOptions : devOptions;
 const eos = EosApi(config);
 const eosJS = Eos(config);
 
-export { eos, eosJS };
+const eosMainnet = EosApi(prodOptions);
+
+export { eos, eosJS, eosMainnet };

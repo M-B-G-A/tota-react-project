@@ -1,9 +1,17 @@
 class DateUtil {
   static parseDate(date) {
-    let d = Date(date);
-    return d;
-    // var datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
-    // return datestring;
+    let d = new Date(+date);
+    var datestring = d.getFullYear() + "." + (d.getMonth()+1)  + "." + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+    return datestring;
+  }
+
+  static getRemainingTime(end) {
+    var now = new Date();
+    // console.log(endDate);
+    if (end - now > 0) {
+      return (end - now) / 1000;
+    }
+    return 0;
   }
 }
 

@@ -7,6 +7,7 @@ import { withRouter } from "react-router";
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import * as appActions from "../reducers/app";
+import * as proxyActions from "../reducers/proxy";
 import * as routes from "../constants";
 import { scatterNetwork } from "../apis/scatter";
 import { eos } from "../apis/eos";
@@ -30,17 +31,20 @@ class Header extends Component {
       const scatter = ScatterJS.scatter;
       const requiredFields = { accounts:[scatterNetwork] };
 
-
-
-
       scatter.getIdentity(requiredFields).then(() => {
         const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
         console.log(account);
         this.props.appActions.setUserAccount(account);
         localStorage.setItem('account', account);
-
+        // account Detail
         eos.getAccount(account.name).then(res => {
           this.props.appActions.setUserAccountInfo(res);
+
+          // 내가 지지하는 프록시 세팅
+          const proxy = this.props.proxies.filter(item => item.account === res["voter_info"]["proxy"])
+          if (proxy.length !== 0) {
+            this.props.proxyActions.setUserProxy(proxy[0]);
+          }
         })
       }).catch(error => {
         console.error(error);
@@ -94,10 +98,12 @@ class Header extends Component {
 
 const mapStateToProps = state => ({
   account: state.app.account,
+  proxies: state.app.proxies,
 });
 
 const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(appActions, dispatch),
+  proxyActions: bindActionCreators(proxyActions, dispatch)
 });
 
 export default compose(

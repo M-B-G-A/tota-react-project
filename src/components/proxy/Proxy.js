@@ -5,9 +5,12 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import * as appActions from "../../reducers/app";
+import * as proxyActions from "../../reducers/proxy";
+import { eosMainnet } from "../../apis/eos";
+import * as routes from "../../constants";
 const styles = {
   root: {
-    width: '50%',
+    width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
@@ -22,15 +25,41 @@ const styles = {
   },
 };
 class Proxy extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    if (this.props.proxy === null) {
+      this.props.history.push(routes.HOME);
+      return
+    }
+    // Proxy의 BP들은 Mainnet에서 가져온다.
+    eosMainnet.getAccount(this.props.proxy.account).then(res => {
+      this.props.proxyActions.setProxyProducers(res["voter_info"]["producers"]);
+    })
+  }
+
   render() {
+    if (this.props.proxy === null) {
+      return null;
+    }
     return (
       <div style={styles.root}>
         <Grid>
           <Row style={{ paddingBottom: 30 }}>
-            <h3>지지중인 프록시</h3>
-            <h3>
-            {this.props.accountInfo === null ? null : (this.props.proxies.filter(item => item.account === this.props.accountInfo["voter_info"]["proxy"])[0].name)} Proxy
-            </h3>
+            <Col md={6}>
+              <h3>지지중인 프록시</h3>
+              <h3>
+              {this.props.proxy.name} Proxy
+              </h3>
+            </Col>
+            <Col md={6} style={{ textAlign: 'right' }}>
+              <h3>총 {this.props.proxy.delegated}</h3>
+              <h3>
+               위임 중
+              </h3>
+            </Col>
           </Row>
           <Row>
           <hr />
@@ -38,13 +67,13 @@ class Proxy extends Component {
             프록시의 투표 리스트
           </Row>
             {
-              ["1", "2", "3"].map((item, index) =>
+              this.props.producers.map((item, index) =>
                 <Col xs={6} sm={6} md={4} lg={4} key={index}>
-                  <Thumbnail src={ process.env.PUBLIC_URL + "Logo_line.png" } alt="200x200" style={{ textAlign: 'center', backgroundColor: '#F8F8F8' }}>
+                  {/* <Thumbnail src={ process.env.PUBLIC_URL + "Logo_line.png" } alt="200x200" style={{ textAlign: 'center', backgroundColor: '#F8F8F8' }}> */}
                     <h2 style={{ fontSize: '2vw' }}>
                       { item }
                     </h2>
-                  </Thumbnail>
+                  {/* </Thumbnail> */}
                 </Col>
               )
             }
@@ -64,15 +93,18 @@ class Proxy extends Component {
 
 const mapStateToProps = state => ({
   proxies: state.app.proxies,
-  games: state.app.games,
   account: state.app.account,
   isOpenBettingDialog: state.app.isOpenBettingDialog,
   accountInfo: state.app.accountInfo,
   currentGame: state.app.currentGame,
+
+  proxy: state.proxy.proxy,
+  producers: state.proxy.producers,
 });
 
 const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(appActions, dispatch),
+  proxyActions: bindActionCreators(proxyActions, dispatch)
 });
 
 

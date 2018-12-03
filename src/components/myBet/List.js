@@ -23,6 +23,11 @@ const styles = {
 };
 
 const List = (props) => {
+
+  const onReceiveButtonClicked = (gameKey) => {
+    props.onReceiveButtonClicked(gameKey);
+  }
+
   return (
     <div>
       <Table>
@@ -42,12 +47,14 @@ const List = (props) => {
           // props.dividendList.length === 0 ? null : (
           props.dividendList.map((item, index) =>
             // {item["game"] === undefined ? null : (
-<tr>
+            <tr>
               <td>{ item["game_key"] }</td>
-              {/* <td>{ DateUtil.parseDate(item["game"]["end_time"]) }</td> */}
-              {/* <td>{ CommonUtil.printGameResult(props.proxies, item["game"]["result"]) }</td> */}
-              {/* <td>{ CommonUtil.printTotalGameAmount(item["game"]["team1_asset"], item["game"]["team2_asset"]) }</td> */}
+              <td>{ DateUtil.parseDate(item["game"]["end_time"]) }</td>
+              <td>{ CommonUtil.printGameResult(props.proxies, item["game"]["result"]) }</td>
+              <td>{ CommonUtil.printTotalGameAmount(item["game"]["team1_asset"], item["game"]["team2_asset"]) }</td>
               <td>{ item["amount"] }</td>
+              <td>{ 0 }</td>
+              <td>{ item["status"] === 1 ? (<Button disabled>수령하기</Button>) : (<Button onClick={() => onReceiveButtonClicked(item["game_key"])} >수령하기</Button>) }</td>
             </tr>
            )
           }

@@ -35,7 +35,7 @@ const Info = (props) => {
             자신이 베팅한 프록시가 이기길 원한다면, 친구들과 함께 해당 프록시를 지지하세요!
           </p>
           <p>
-            <h1><i>Enjoy Your ToTa !</i></h1>
+            <i>Enjoy Your ToTa !</i>
           </p>
         </Row>
       </Grid>

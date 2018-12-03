@@ -7,7 +7,11 @@ import { bindActionCreators } from "redux";
 import * as appActions from "../../reducers/app";
 import List from "../myBet/List";
 import { eos } from "../../apis/eos";
-
+import * as routes from "../../constants";
+import ScatterJS from 'scatterjs-core';
+import ScatterEOS from 'scatterjs-plugin-eosjs';
+import Eos from "eosjs";
+import { scatterNetwork } from "../../apis/scatter";
 const styles = {
   root: {
     width: '80%',
@@ -25,18 +29,21 @@ const styles = {
 };
 
 class MyBet extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.account !== nextProps.account) {
-      eos.getTableRows(true, "totatestgame", "totatestgame", "games2").then((games) => {
-        eos.getTableRows(true, "totatestgame", "totatestgame", "histories2").then((res) => {
-          let list = res.rows.filter(item => item.user === nextProps.account.name);
-          this.getDividendList(games.rows, list);
-        });
-      });
+  componentDidMount() {
+    if (this.props.account === null) {
+      this.props.history.push(routes.HOME);
+      return
     }
+
+    eos.getTableRows(true, "totatestgame", "totatestgame", "games2").then((games) => {
+      eos.getTableRows(true, "totatestgame", "totatestgame", "histories2").then((res) => {
+        let list = res.rows.filter(item => item.user === this.props.account.name);
+        this.getDividendList(games.rows, list);
+      });
+    });
   }
 
   getDividendList = (games, dividendList) => {
@@ -45,9 +52,20 @@ class MyBet extends Component {
       const dividend = dividendList[i]
       const game = games.filter(item => item.key === dividend["game_key"])[0];
       dividend["game"] = game;
-      newList.push( );
+      newList.push(dividend);
     }
     this.props.appActions.setDividendList(newList);
+  }
+
+  onReceiveButtonClicked = (gameKey) => {
+    ScatterJS.plugins(new ScatterEOS());
+    const scatter = ScatterJS.scatter;
+    const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
+    eos.contract('totatestgame').then(myaccount => {
+      myaccount.dropcoin(this.props.account.name, gameKey).then(res => {
+        console.log('result', res);
+      });
+    });
   }
 
   render() {
@@ -61,6 +79,7 @@ class MyBet extends Component {
           <List
             dividendList={this.props.dividendList}
             proxies={this.props.proxies}
+            onReceiveButtonClicked={this.onReceiveButtonClicked}
           />
           </Row>
         </Grid>
