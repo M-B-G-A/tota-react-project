@@ -12,6 +12,7 @@ const ACTION_OPEN_BETTING_DIALOG = "app/ACTION_OPEN_BETTING_DIALOG";
 const ACTION_SET_CURRENT_GAME = "app/ACTION_SET_CURRENT_GAME";
 const ACTION_UPDATE_PROXY_PRODUCERS = "app/ACTION_UPDATE_PROXY_PRODUCERS";
 const ACTION_UPDATE_REMAINING_TIME = "app/ACTION_UPDATE_REMAINING_TIME";
+const ACTION_SET_USER_SITE_LANGUAGE = "app/ACTION_SET_USER_SITE_LANGUAGE";
 // ================================================================
 // Action Creator
 // ================================================================
@@ -24,6 +25,7 @@ export const openBettingDialog = createAction(ACTION_OPEN_BETTING_DIALOG, open =
 export const setCurrentGame = createAction(ACTION_SET_CURRENT_GAME, game => game);
 export const updateProxyProducers = createAction(ACTION_UPDATE_PROXY_PRODUCERS, ({ account, producers }) => ({ account, producers }))
 export const updateRemainingTime = createAction(ACTION_UPDATE_REMAINING_TIME, time => time);
+export const setUserSiteLanguage = createAction(ACTION_SET_USER_SITE_LANGUAGE, language => language);
 
 // initial state
 const initialState = {
@@ -54,6 +56,8 @@ const initialState = {
   dividendList: [], // 나의 배당 내역
   isOpenBettingDialog: false,
   remainingTime: null,
+  userSiteLanguage: navigator.language.split('-')[0],
+  siteLanguages: ["ko", "en"], // 지원하는 사이트 언어들
 };
 
 const appReducer = handleActions({
@@ -108,6 +112,10 @@ const appReducer = handleActions({
   [ACTION_UPDATE_REMAINING_TIME]: (state, { payload: time }) => ({
     ...state,
     remainingTime: time,
+  }),
+  [ACTION_SET_USER_SITE_LANGUAGE]: (state, { payload: language }) => ({
+    ...state,
+    userSiteLanguage: language,
   }),
 }, initialState);
 

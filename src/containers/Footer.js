@@ -4,11 +4,18 @@ import { connect } from "react-redux";
 import { compose } from "recompose";
 import { withRouter } from "react-router";
 import { FormattedMessage } from "react-intl"
+import * as appActions from "../reducers/app";
+import { bindActionCreators } from "redux";
 
 const styles = {
 }
 
 class Footer extends Component {
+
+  handleSelectLanguage = (key, event) => {
+    this.props.appActions.setUserSiteLanguage(key)
+  };
+
   render() {
     return (
       <Navbar staticTop={true} style={{ marginBottom: 0 }}>
@@ -34,7 +41,21 @@ class Footer extends Component {
               Language
               </div>
               <div style={{ display: 'table-cell' }}>
-                한국어 <u>변경하기</u>
+                <FormattedMessage id="language" />
+                <SplitButton
+                  bsSize="xsmall"
+                  title={<FormattedMessage id={this.props.userSiteLanguage} />}
+                  dropup id="split-button-dropup"
+                  onSelect={(k, e) => this.handleSelectLanguage(k, e)}
+                  style={{ marginLeft: 10 }}>
+                  {
+                    this.props.siteLanguages.map((item, index) => (
+                      <MenuItem eventKey={item} key={index}>
+                        {<FormattedMessage id={item} />}
+                      </MenuItem>
+                    ))
+                  }
+                </SplitButton>
               </div>
             </div>
           </div>
@@ -43,4 +64,14 @@ class Footer extends Component {
     );
   }
 }
-export default Footer;
+
+const mapStateToProps = state => ({
+  userSiteLanguage: state.app.userSiteLanguage,
+  siteLanguages: state.app.siteLanguages,
+});
+
+const mapDispatchToProps = dispatch => ({
+  appActions: bindActionCreators(appActions, dispatch),
+});
+
+export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Footer);

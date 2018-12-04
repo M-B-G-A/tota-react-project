@@ -132,8 +132,10 @@ class Landing extends Component {
                   <h4>{ proxy.icon } { proxy.name }</h4>
                   <div style={{ width: 142, height: 142, borderRadius: 71, border: 'solid 5px #979797', display: 'inline-block', marginTop: 30, marginBottom: 30, textAlign: 'center' }}>
                     <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
-                      승률<br />
-                      { proxy.winningAvg * 100 } %
+                      <div>
+                        현재      승률<br />
+                        <h4>{ proxy.winningAvg * 100 } %</h4>
+                      </div>
                     </div>
                   </div>
                   <h4>{ proxy.delegated } EOS 위임중</h4>
