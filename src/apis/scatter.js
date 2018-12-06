@@ -17,7 +17,7 @@ const devNetworkOptions = {
   chainId:'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473'
 };
 
-
-const scatterNetwork = process.env.NODE_ENV === "production" ? prodNetworkOptions : devNetworkOptions;
+// process.env.NODE_ENV === "production" ? prodNetworkOptions : devNetworkOptions;
+const scatterNetwork = devNetworkOptions;
 
 export { scatterNetwork };

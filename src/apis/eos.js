@@ -23,10 +23,10 @@ const devOptions = {
   fetchConfiguration: {},
 }
 
-const config = process.env.NODE_ENV === "production" ? prodOptions : devOptions;
+// const config = process.env.NODE_ENV === "production" ? prodOptions : devOptions;
 
-const eos = EosApi(config);
-const eosJS = Eos(config);
+const eos = EosApi(devOptions);
+const eosJS = Eos(devOptions);
 
 const eosMainnet = EosApi(prodOptions);
 
