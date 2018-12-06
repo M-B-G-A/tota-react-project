@@ -13,7 +13,7 @@ import * as appActions from "../../reducers/app";
 
 const styles = {
   root: {
-    width: '50%',
+    width: '60%',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
@@ -104,7 +104,7 @@ class Landing extends Component {
           <Row className="show-grid" style={styles.row}>
             <h3>{ this.printRemainingTime() }</h3>
           </Row>
-          <Row className="show-grid" style={{ paddingRight: 150, paddingLeft: 150 }}>
+          <Row className="show-grid">
             <Col>
               <ProgressBar bsStyle="info" active now={86400 - this.props.remainingTime} max={86400} />
             </Col>

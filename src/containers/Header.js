@@ -67,30 +67,40 @@ class Header extends Component {
 
   render() {
     return (
-      <Navbar fixedTop={true} staticTop={true}>
+      <Navbar fixedTop={true} staticTop={true} collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <div onClick={() => this.onNavItemClicked(routes.LANDING)}>
               <img src= { process.env.PUBLIC_URL + "Logo_line.png" } alt="" style={{ width: 80, height: 20 }} />
             </div>
           </Navbar.Brand>
-          <Nav>
-            <NavItem onClick={() => this.onNavItemClicked(routes.PROXY)}>
-              PROXY
-            </NavItem>
-            <NavItem onClick={() => this.onNavItemClicked(routes.MYBET)}>
-              My bet
-            </NavItem>
-            <NavItem onClick={() => this.onNavItemClicked(routes.INFO)}>
-              Info
+          <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+              <NavItem onClick={() => this.onNavItemClicked(routes.PROXY)}>
+                PROXY
+              </NavItem>
+              <NavItem onClick={() => this.onNavItemClicked(routes.MYBET)}>
+                My bet
+              </NavItem>
+              <NavItem onClick={() => this.onNavItemClicked(routes.INFO)}>
+                Info
+              </NavItem>
+              {/* <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+                <MenuItem eventKey={3.1}>PROXY</MenuItem>
+                <MenuItem eventKey={3.2}>My bet</MenuItem>
+                <MenuItem eventKey={3.3}>Info</MenuItem>
+                <MenuItem divider />
+                <MenuItem eventKey={3.3}>Separated link</MenuItem>
+              </NavDropdown> */}
+          </Nav>
+          <Nav pullRight>
+            <NavItem eventKey={1}>
+              <u>{ this.props.account === null ? "로그인 필요" : this.props.account.name }</u>
             </NavItem>
           </Nav>
-        </Navbar.Header>
-        <Nav pullRight style={{ display: 'table-cell' }}>
-         <NavItem>
-           <u>{ this.props.account === null ? "로그인 필요" : this.props.account.name }</u>
-         </NavItem>
-        </Nav>
+        </Navbar.Collapse>
       </Navbar>
     );
   }
