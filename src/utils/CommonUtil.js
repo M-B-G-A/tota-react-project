@@ -2,11 +2,17 @@ class CommonUtil {
   static printTotalGameAmount = (teamAsset1, teamAsset2) => {
     const amount1 = teamAsset1.split(" ")[0] * 1.0;
     const amount2 = teamAsset2.split(" ")[0] * 1.0;
-    return (amount1 + amount2);
+    const sum = amount1 + amount2;
+    if (sum === 0) { return 0 } else return (amount1 + amount2).toFixed(4);
   }
 
-  static getAmount = (asset) => {
-    return asset.split(" ")[0] * 1.0;
+  static getAmount = (asset, num = 4) => {
+    const amount = asset.split(" ")[0] * 1.0;
+    if (num !== null) {
+      return amount;
+    } else {
+      return amount.toFixed(num);
+    }
   }
 
   static getDividendRate = (team, teamAsset1, teamAsset2) => {
@@ -16,12 +22,12 @@ class CommonUtil {
       if (teamAmount1 === 0) {
         return "-"
       }
-      return 0.999 * (teamAmount1 + teamAmount2) / teamAmount1
+      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount1).toFixed(4)
     } else if (team === 1) {
       if (teamAmount2 === 0) {
         return "-"
       }
-      return 0.999 * (teamAmount1 + teamAmount2) / teamAmount2
+      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount2).toFixed(4)
     }
   }
 

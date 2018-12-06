@@ -138,7 +138,7 @@ class Landing extends Component {
                       </div>
                     </div>
                   </div>
-                  <h4>{ proxy.delegated } EOS 위임중</h4>
+                  <h4>{ proxy.delegated.toFixed(4) } EOS 위임중</h4>
                   <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.openBettingDialog(true)}>
                     베팅하기
                   </Button>
