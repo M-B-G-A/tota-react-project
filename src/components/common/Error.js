@@ -1,7 +1,7 @@
 import React from "react";
 import { Jumbotron, Button, Thumbnail } from "react-bootstrap"
 import { withRouter } from "react-router"
-import * as routes from "../constants"
+import * as routes from "../../constants"
 
 const Error = (props) => {
   return (

@@ -38,10 +38,9 @@ class MyBet extends Component {
       return
     }
 
-    eos.getTableRows(true, "totatestgame", "totatestgame", "games2").then((games) => {
-      eos.getTableRows(true, "totatestgame", "totatestgame", "histories2").then((res) => {
-        let list = res.rows.filter(item => item.user === this.props.account.name);
-        this.getDividendList(games.rows, list);
+    eos.getTableRows(true, "totatestgame", "totatestgame", "games2", "", 0, -1, this.props.currentGame).then((games) => {
+      eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame, "i64", "2").then((res) => {
+        this.getDividendList(games.rows, res.rows);
       });
     });
   }
@@ -68,6 +67,10 @@ class MyBet extends Component {
     });
   }
 
+  onBettingButtonClicked = () => {
+    this.props.history.push(routes.HOME);
+  }
+
   render() {
     return (
       <div style={styles.root}>
@@ -76,11 +79,19 @@ class MyBet extends Component {
           <div style={{ marginTop: 30, marginBottom: 30 }}>
             <h4>이전회차 결과</h4>
           </div>
-          <List
+          {this.props.dividendList.length === 0 ? (
+            <div style={styles.row}>
+              {/* 베팅 내역이 없습니다.
+              <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.onBettingButtonClicked()}>
+                베팅하러 가기
+              </Button> */}
+            </div>
+          ) :
+          (<List
             dividendList={this.props.dividendList}
             proxies={this.props.proxies}
             onReceiveButtonClicked={this.onReceiveButtonClicked}
-          />
+          />)}
           </Row>
         </Grid>
       </div>
@@ -93,6 +104,7 @@ const mapStateToProps = state => ({
   proxies: state.app.proxies,
   games: state.app.games,
   dividendList: state.app.dividendList,
+  currentGame: state.app.currentGame,
 });
 
 const mapDispatchToProps = dispatch => ({

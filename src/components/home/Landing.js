@@ -91,6 +91,9 @@ class Landing extends Component {
   openBettingDialog = (open) => {
     if (this.props.proxy !== null) {
       this.props.appActions.openBettingDialog(open);
+    } else {
+      this.props.appActions.setDialogMessage({ title: "지지하는 프록시가 없습니다.", content: "프록시를 설정해주세요." });
+      this.props.appActions.openDialog(true);
     }
   }
 

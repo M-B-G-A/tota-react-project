@@ -53,16 +53,18 @@ class Header extends Component {
   }
 
   onNavItemClicked = (route) => {
-    switch(route) {
-      case routes.LANDING:
-        return this.props.history.push(routes.HOME);
-      case routes.MYBET:
-        return this.props.history.push(routes.MYBET);
-      case routes.PROXY:
-        return this.props.history.push(routes.PROXY);
-      case routes.INFO:
-        return this.props.history.push(routes.INFO);
+
+    if (this.props.account === null) {
+      return
     }
+
+    if (route === routes.PROXY && this.props.proxy === null) {
+      this.props.appActions.setDialogMessage({ title: "지지하는 프록시가 없습니다.", content: "프록시를 설정해주세요." });
+      this.props.appActions.openDialog(true);
+      return
+    }
+
+    return this.props.history.push(route);
   };
 
   render() {
@@ -109,6 +111,7 @@ class Header extends Component {
 const mapStateToProps = state => ({
   account: state.app.account,
   proxies: state.app.proxies,
+  proxy: state.proxy.proxy,
 });
 
 const mapDispatchToProps = dispatch => ({

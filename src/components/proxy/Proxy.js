@@ -65,22 +65,6 @@ class Proxy extends Component {
     }, 1000);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // TODO: 수정하기
-    // if (this.props.producer !== nextProps.producers) {
-    //   nextProps.producers.map(producer => {
-    //     if (producer.image === null) {
-    //       firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.png`).getDownloadURL().then((url) => {
-    //         this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
-    //       }).catch((error) => {
-    //         console.error(error);
-    //         this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
-    //       })
-    //     }
-    //   });
-    // }
-  }
-
   render() {
     if (this.props.proxy === null) {
       return null;
@@ -92,11 +76,11 @@ class Proxy extends Component {
             <Col md={6}>
               <h3>지지중인 프록시</h3>
               <h3>
-              {this.props       .proxy.name} Proxy
+              {this.props.proxy.name} Proxy
               </h3>
             </Col>
             <Col md={6} style={{ textAlign: 'right' }}>
-              <h3>총 {this.props.proxy.delegated}{' '}EOS</h3>
+              <h3>총 {this.props.proxy.delegated.toFixed(4)}{' '}EOS</h3>
               <h3>
                위임 중
               </h3>

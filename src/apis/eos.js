@@ -17,7 +17,7 @@ const devOptions = {
   httpEndpoint: "https://jungle2.cryptolions.io:443", // default, null for cold-storage
   verbose: false, // API logging
   logger: { // Default logging functions
-    // log: console.log,
+    log: console.log,
     error: console.error,
   },
   fetchConfiguration: {},

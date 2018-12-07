@@ -19,7 +19,6 @@ class BettingDialog extends Component {
   }
 
   componentDidMount() {
-    
   }
 
   handleChange = (e) => {

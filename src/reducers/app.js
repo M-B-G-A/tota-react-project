@@ -13,6 +13,9 @@ const ACTION_SET_CURRENT_GAME = "app/ACTION_SET_CURRENT_GAME";
 const ACTION_UPDATE_PROXY_PRODUCERS = "app/ACTION_UPDATE_PROXY_PRODUCERS";
 const ACTION_UPDATE_REMAINING_TIME = "app/ACTION_UPDATE_REMAINING_TIME";
 const ACTION_SET_USER_SITE_LANGUAGE = "app/ACTION_SET_USER_SITE_LANGUAGE";
+
+const ACTION_OPEN_DIALOG = "app/ACTION_OPEN_DIALOG";
+const ACTION_SET_DIALOG_MESSAGE = "app/ACTION_SET_DIALOG_MESSAGE";
 // ================================================================
 // Action Creator
 // ================================================================
@@ -26,6 +29,9 @@ export const setCurrentGame = createAction(ACTION_SET_CURRENT_GAME, game => game
 export const updateProxyProducers = createAction(ACTION_UPDATE_PROXY_PRODUCERS, ({ account, producers }) => ({ account, producers }))
 export const updateRemainingTime = createAction(ACTION_UPDATE_REMAINING_TIME, time => time);
 export const setUserSiteLanguage = createAction(ACTION_SET_USER_SITE_LANGUAGE, language => language);
+
+export const openDialog = createAction(ACTION_OPEN_DIALOG, open => open);
+export const setDialogMessage = createAction(ACTION_SET_DIALOG_MESSAGE, ({ title, content }) => ({ title, content }));
 
 // initial state
 const initialState = {
@@ -58,6 +64,11 @@ const initialState = {
   remainingTime: null,
   userSiteLanguage: navigator.language.split('-')[0],
   siteLanguages: ["ko", "en"], // 지원하는 사이트 언어들
+  dialogMessage: {
+    title: "",
+    content: "",
+  },
+  isOpenDialog: false, // Alert
 };
 
 const appReducer = handleActions({
@@ -116,6 +127,14 @@ const appReducer = handleActions({
   [ACTION_SET_USER_SITE_LANGUAGE]: (state, { payload: language }) => ({
     ...state,
     userSiteLanguage: language,
+  }),
+  [ACTION_OPEN_DIALOG]: (state, { payload: open }) => ({
+    ...state,
+    isOpenDialog: open,
+  }),
+  [ACTION_SET_DIALOG_MESSAGE]: (state, { payload: dialogMessage }) => ({
+    ...state,
+    dialogMessage: dialogMessage,
   }),
 }, initialState);
 
