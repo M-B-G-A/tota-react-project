@@ -51,7 +51,7 @@ class Landing extends Component {
       this.props.appActions.setGames(games);
       // 현재 진행중인 게임 회차
       this.props.appActions.setCurrentGame(games[0]["key"]);
-      const totalGameCount = games.length; // 총 게임 수
+      const totalGameCount = games.length - 1; // 총 게임 수
       this.props.proxies.map((item, index) => {
         // 현재 게임 예상 배당률
         const dividendRate = CommonUtil.getDividendRate(index, games[0]['team1_asset'], games[0]['team2_asset'])
@@ -102,7 +102,7 @@ class Landing extends Component {
             { this.props.currentGame + 1 } 회차 종료까지
           </Row>
           <Row className="show-grid" style={styles.row}>
-            <h3>{ this.printRemainingTime() }</h3>
+            <h3>{ this.printRemainingTime() }</h3> 
           </Row>
           <Row className="show-grid">
             <Col>
@@ -160,19 +160,27 @@ class Landing extends Component {
                 <th>종료 시간</th><th>승리 PROXY</th><th>총 베팅 EOS</th>
               </tr>
             </thead>
-            <tbody>
             {
-              this.props.games.map((item, index) =>
-                <tr>
-                  <td>{ DateUtil.parseDate(item["end_time"]) }</td>
-                  <td>
-                    {  CommonUtil.printGameResult(this.props.proxies, item["result"]) }
-                  </td>
-                  <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
-                </tr>
-              )
-            }
-            </tbody>
+              this.props.games.filter((g, i) => i !== 0).map((item, index) =>
+              (
+                  <tbody>
+                    <tr>
+                      <td>{ DateUtil.parseDate(item["end_time"]) }</td>
+                      <td>
+                        {  CommonUtil.printGameResult(this.props.proxies, item["result"]) }
+                      </td>
+                      <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
+                    </tr>
+                    <tr>
+                    <td>{ DateUtil.parseDate(item["end_time"]) }</td>
+                    <td>
+                      {  CommonUtil.printGameResult(this.props.proxies, item["result"]) }
+                    </td>
+                    <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
+                    </tr>
+                  </tbody>
+                ),)
+              }
           </Table>
           </Row>
         </Grid>
