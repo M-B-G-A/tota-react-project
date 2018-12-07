@@ -46,7 +46,7 @@ const data1 = [
 class Landing extends Component {
   componentDidMount() {
     // 게임 가져오기
-    eos.getTableRows({"scope":"totatestgame","code":"totatestgame","table":"games2","json":true,"reverse":true}).then((res) => {
+    eos.getTableRows({"scope": "totatestgame", "code": "totatestgame", "table": "games2", "json": true, "reverse": true}).then((res) => {
       const games = res.rows;
       this.props.appActions.setGames(games);
       // 현재 진행중인 게임 회차
@@ -102,7 +102,7 @@ class Landing extends Component {
             { this.props.currentGame + 1 } 회차 종료까지
           </Row>
           <Row className="show-grid" style={styles.row}>
-            <h3>{ this.printRemainingTime() }</h3> 
+            <h3>{ this.printRemainingTime() }</h3>
           </Row>
           <Row className="show-grid">
             <Col>
@@ -157,7 +157,7 @@ class Landing extends Component {
           <Table>
             <thead>
               <tr>
-                <th>종료 시간</th><th>승리 PROXY</th><th>총 베팅 EOS</th>
+                <th>회차</th><th>종료 시간</th><th>승리 PROXY</th><th>총 베팅 EOS</th>
               </tr>
             </thead>
             {
@@ -165,18 +165,12 @@ class Landing extends Component {
               (
                   <tbody>
                     <tr>
-                      <td>{ DateUtil.parseDate(item["end_time"]) }</td>
+                      <td>{ item.key }</td>
+                      <td>{ DateUtil.parseDate(item.end_time) }</td>
                       <td>
-                        {  CommonUtil.printGameResult(this.props.proxies, item["result"]) }
+                        {  CommonUtil.printGameResult(this.props.proxies, item.result) }
                       </td>
-                      <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
-                    </tr>
-                    <tr>
-                    <td>{ DateUtil.parseDate(item["end_time"]) }</td>
-                    <td>
-                      {  CommonUtil.printGameResult(this.props.proxies, item["result"]) }
-                    </td>
-                    <td>{  CommonUtil.printTotalGameAmount(item["team1_asset"], item["team2_asset"]) }</td>
+                      <td>{  CommonUtil.printTotalGameAmount(item.team1_asset, item.team2_asset) }</td>
                     </tr>
                   </tbody>
                 ),)
