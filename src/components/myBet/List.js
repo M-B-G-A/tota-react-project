@@ -48,7 +48,7 @@ const List = (props) => {
           props.dividendList.map((item, index) =>
             // {item["game"] === undefined ? null : (
             <tr>
-              <td>{ item["game_key"] }</td>
+              <td>{ item["game_key"] + 1 }</td>
               <td>{ DateUtil.parseDate(item["game"]["end_time"]) }</td>
               <td>{ CommonUtil.printGameResult(props.proxies, item["game"]["result"]) }</td>
               <td>{ CommonUtil.printTotalGameAmount(item["game"]["team1_asset"], item["game"]["team2_asset"]) }</td>

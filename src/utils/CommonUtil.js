@@ -2,7 +2,7 @@ class CommonUtil {
   static printTotalGameAmount = (teamAsset1, teamAsset2) => {
     const amount1 = teamAsset1.split(" ")[0] * 1.0;
     const amount2 = teamAsset2.split(" ")[0] * 1.0;
-    const sum = amount1 + amount2;
+    const sum = amount1 + amount2 - 0.0002;
     if (sum === 0) { return 0 } else return (amount1 + amount2).toFixed(4);
   }
 

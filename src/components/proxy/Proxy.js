@@ -109,7 +109,7 @@ class Proxy extends Component {
               <h3>{this.props.currentGame + 1} 회차 나의 배팅 내역</h3>
             </Col>
             <Col md={6} style={{ textAlign: 'right' }}>
-              <h3>총 0{' '}EOS</h3>
+              <h3>총 { this.props.currentGameAmount } EOS</h3>
             </Col>
           </Row>
           <Row style={{ paddingBottom: 30 }}>
@@ -133,7 +133,7 @@ const mapStateToProps = state => ({
   isOpenBettingDialog: state.app.isOpenBettingDialog,
   accountInfo: state.app.accountInfo,
   currentGame: state.app.currentGame,
-
+  currentGameAmount: state.app.currentGameAmount,
   proxy: state.proxy.proxy,
   producers: state.proxy.producers,
 });

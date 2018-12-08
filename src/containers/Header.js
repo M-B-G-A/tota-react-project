@@ -11,6 +11,7 @@ import * as proxyActions from "../reducers/proxy";
 import * as routes from "../constants";
 import { scatterNetwork } from "../apis/scatter";
 import { eos } from "../apis/eos";
+import { CommonUtil } from "../utils";
 
 const styles = {
   content: {
@@ -53,6 +54,13 @@ class Header extends Component {
           const proxy = this.props.proxies.filter(item => item.account === res["voter_info"]["proxy"])
           if (proxy.length !== 0) {
             this.props.proxyActions.setUserProxy(proxy[0]);
+          }
+        });
+
+        eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame, "i64", "2").then((res) => {
+          let histories = res.rows.filter(history => history.game_key === this.props.currentGame)
+          if (histories.length !== 0) {
+            this.props.appActions.setCurrentGameAmount(CommonUtil.getAmount(histories[0].amount, 4));
           }
         });
       }).catch(error => {
@@ -122,6 +130,7 @@ const mapStateToProps = state => ({
   account: state.app.account,
   proxies: state.app.proxies,
   proxy: state.proxy.proxy,
+  currentGame: state.app.currentGame,
 });
 
 const mapDispatchToProps = dispatch => ({

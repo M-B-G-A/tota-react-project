@@ -12,6 +12,8 @@ import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
 import { scatterNetwork } from "../../apis/scatter";
+import { CommonUtil } from "../../utils";
+
 const styles = {
   root: {
     width: '80%',
@@ -40,6 +42,10 @@ class MyBet extends Component {
 
     eos.getTableRows(true, "totatestgame", "totatestgame", "games2", "", 0, -1, this.props.currentGame).then((games) => {
       eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame, "i64", "2").then((res) => {
+        let histories = res.rows.filter(history => history.game_key === this.props.currentGame)
+        if (histories.length !== 0) {
+          this.props.appActions.setCurrentGameAmount(CommonUtil.getAmount(histories[0].amount, 4));
+        }
         this.getDividendList(games.rows, res.rows);
       });
     });
