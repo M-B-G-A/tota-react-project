@@ -16,6 +16,7 @@ const ACTION_SET_USER_SITE_LANGUAGE = "app/ACTION_SET_USER_SITE_LANGUAGE";
 
 const ACTION_OPEN_DIALOG = "app/ACTION_OPEN_DIALOG";
 const ACTION_SET_DIALOG_MESSAGE = "app/ACTION_SET_DIALOG_MESSAGE";
+const ACTION_SET_SELECTED_PROXY = "app/ACTION_SET_SELECTED_PROXY"
 // ================================================================
 // Action Creator
 // ================================================================
@@ -33,6 +34,7 @@ export const setUserSiteLanguage = createAction(ACTION_SET_USER_SITE_LANGUAGE, l
 export const openDialog = createAction(ACTION_OPEN_DIALOG, open => open);
 export const setDialogMessage = createAction(ACTION_SET_DIALOG_MESSAGE, ({ title, content }) => ({ title, content }));
 
+export const setSelectedProxy = createAction(ACTION_SET_SELECTED_PROXY, (proxy) => (proxy));
 // initial state
 const initialState = {
   account: null, // Scatter
@@ -69,6 +71,8 @@ const initialState = {
     content: "",
   },
   isOpenDialog: false, // Alert
+  selectedProxy: null,
+  currentAmount: 0, // 나의 총 베팅 EOS Amount
 };
 
 const appReducer = handleActions({
@@ -135,6 +139,10 @@ const appReducer = handleActions({
   [ACTION_SET_DIALOG_MESSAGE]: (state, { payload: dialogMessage }) => ({
     ...state,
     dialogMessage: dialogMessage,
+  }),
+  [ACTION_SET_SELECTED_PROXY]: (state, { payload: proxy }) => ({
+    ...state,
+    selectedProxy: proxy,
   }),
 }, initialState);
 

@@ -34,6 +34,9 @@ class BettingDialog extends Component {
     const scatter = ScatterJS.scatter;
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.voteproducer(this.props.account.name, this.props.selectedProxy.account, []).then(res => {
+      // res 체크
+      console.log(res);
+      this.props.setUserProxy(this.props.selectedProxy);
       this.props.openBettingDialog(false)
     });
   }
@@ -69,10 +72,10 @@ class BettingDialog extends Component {
   }
 
   render() {
-    if (this.props.proxy === null && (this.props.selectedProxy === null || this.props.selectedProxy === undefined)) {
+    if (this.props.isOpenBettingDialog === false) {
       return null;
     }
-    if (this.props.proxy !== this.props.selectedProxy && (this.props.selectedProxy !== null && this.props.selectedProxy !== undefined)) {
+    if (this.props.proxy !== this.props.selectedProxy && this.props.selectedProxy !== null) {
       return (
         <div>
           <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
@@ -103,58 +106,57 @@ class BettingDialog extends Component {
           </Modal>
         </div>
       )
-    } else {
-      return (
-        <div>
-          <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
-            <Modal.Header closeButton style={{ border: 'none' }}>
-              <Modal.Title>
-                <div style={{ width: '100%', textAlign: 'center' }}>
-                  { this.props.currentGame + 1 } 라운드 베팅하기
-                </div>
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div style={{ width:'100%', textAlign: 'center' }}>
-                나의 지지 프록시 : { this.props.proxy.name }
-              </div>
-              <Form inline style={{ marginTop: 20, padding: 10, textAlign: 'center' }}>
-                <FormGroup
-                  controlId="formBasicText"
-                >
-                  <ControlLabel>{ this.props.proxy.name }{' '}에 베팅하기</ControlLabel>{' '}
-                  <FormControl
-                    type="text"
-                    value={this.state.inputText}
-                    placeholder="Enter Amount"
-                    onChange={this.handleChange}
-                    style={{ marginRight: 10, marginLeft: 10, border: 'none', boxShadow: 'none', borderBottom: 'solid 1px #979797', borderRadius: '0' }}
-                  />
-                  {' '}<ControlLabel>EOS</ControlLabel>
-                  <FormControl.Feedback />
-                  <HelpBlock style={{ color: 'red' }}>{ this.state.error }</HelpBlock>
-                </FormGroup>
-              </Form>
-              <div style={{ width: '100%', textAlign: 'right', paddingRight: 120 }}>
-                나의 보유량 : { this.props.accountInfo.core_liquid_balance }
-              </div>
-            </Modal.Body>
-            <Modal.Footer style={{ border: 'none' }}>
-              <div style={{ width: '100%', textAlign: 'center' }}>
-                <Button
-                  bsStyle="info"
-                  bsSize="large"
-                  onClick={() => this.onBettingButtonClicked()}
-                  style={{ width: '50%', height: '92' }}
-                >
-                  베팅하기
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      );
     }
+    return (
+      <div>
+        <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
+          <Modal.Header closeButton style={{ border: 'none' }}>
+            <Modal.Title>
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                { this.props.currentGame + 1 } 라운드 베팅하기
+              </div>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div style={{ width:'100%', textAlign: 'center' }}>
+              나의 지지 프록시 : { this.props.proxy.name }
+            </div>
+            <Form inline style={{ marginTop: 20, padding: 10, textAlign: 'center' }}>
+              <FormGroup
+                controlId="formBasicText"
+              >
+                <ControlLabel>{ this.props.proxy.name }{' '}에 베팅하기</ControlLabel>{' '}
+                <FormControl
+                  type="text"
+                  value={this.state.inputText}
+                  placeholder="Enter Amount"
+                  onChange={this.handleChange}
+                  style={{ marginRight: 10, marginLeft: 10, border: 'none', boxShadow: 'none', borderBottom: 'solid 1px #979797', borderRadius: '0' }}
+                />
+                {' '}<ControlLabel>EOS</ControlLabel>
+                <FormControl.Feedback />
+                <HelpBlock style={{ color: 'red' }}>{ this.state.error }</HelpBlock>
+              </FormGroup>
+            </Form>
+            <div style={{ width: '100%', textAlign: 'right', paddingRight: 120 }}>
+              나의 보유량 : { this.props.accountInfo.core_liquid_balance }
+            </div>
+          </Modal.Body>
+          <Modal.Footer style={{ border: 'none' }}>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              <Button
+                bsStyle="info"
+                bsSize="large"
+                onClick={() => this.onBettingButtonClicked()}
+                style={{ width: '50%', height: '92' }}
+              >
+                베팅하기
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
   };
 }
 export default BettingDialog;

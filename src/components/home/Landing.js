@@ -10,6 +10,7 @@ import { CommonUtil, DateUtil } from "../../utils";
 import BettingDialog from "./BettingDialog";
 
 import * as appActions from "../../reducers/app";
+import * as proxyActions from "../../reducers/proxy";
 
 const styles = {
   root: {
@@ -47,9 +48,6 @@ class Landing extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      selectedProxy: null,
-    };
   }
 
   componentDidMount() {
@@ -100,8 +98,12 @@ class Landing extends Component {
   }
 
   openBettingDialog = (open, proxy) => {
-    this.setState({ selectedProxy: proxy });
-    this.props.appActions.openBettingDialog(open);
+    if (this.props.account) {
+      if (open === true) {
+        this.props.appActions.setSelectedProxy(proxy);
+      }
+      this.props.appActions.openBettingDialog(open);
+    }
   }
 
   render() {
@@ -196,7 +198,8 @@ class Landing extends Component {
           proxies={this.props.proxies}
           proxy={this.props.proxy}
           currentGame={this.props.currentGame}
-          selectedProxy={this.state.selectedProxy}
+          selectedProxy={this.props.selectedProxy}
+          setUserProxy={this.props.proxyActions.setUserProxy}
         />
       </div>
     );
@@ -212,10 +215,12 @@ const mapStateToProps = state => ({
   currentGame: state.app.currentGame,
   remainingTime: state.app.remainingTime,
   proxy: state.proxy.proxy,
+  selectedProxy: state.app.selectedProxy,
 });
 
 const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(appActions, dispatch),
+  proxyActions: bindActionCreators(proxyActions, dispatch),
 });
 
 export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Landing);
