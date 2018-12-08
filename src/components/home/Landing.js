@@ -62,15 +62,47 @@ class Landing extends Component {
         // 현재 게임 예상 배당률
         const dividendRate = CommonUtil.getDividendRate(index, games[0]['team1_asset'], games[0]['team2_asset'])
         // Proxy 승률
-        const winGameCount = games.filter(game => game["result"] === (index + 1)).length;
-        const drawGameCount = games.filter(game => game["result"] === 3).length;
-        const winningAvg = winGameCount / (totalGameCount - drawGameCount);
+        const loadProxyRate = async function () {
+          const proxy1Info = await eosMainnet.getAccount("totaproxyno1");
+          const proxy2Info = await eosMainnet.getAccount("totaproxyno2");
+          const producerList = await eosMainnet.getProducers(true, "", 21);
+          console.log(producerList);
+          const producers1 = proxy1Info["voter_info"]["producers"];
+          const array1 = [];
+          for (const i of producers1) {
+            array1.push(i)
+          }
+          console.log(array1);
+          const producers2 = proxy2Info["voter_info"]["producers"];
+          const array2 = [];
+          for (const i of producers2) {
+            array2.push(i)
+          }
+          console.log(array2);
+          let count1 = 0;
+          let count2 = 0;
+
+          for(let producer of producerList.rows) {
+            if(producers1.indexOf(producer.owner) != -1){
+              count1 += 1;
+            }
+            if(producers2.indexOf(producer.owner) != -1){
+              count2 += 1;
+            }
+          }
+          return [count1/21, count2/21]
+        };
+        loadProxyRate().then(rateArr => {
+          const winningAvg = rateArr[index];
+        
         // Proxy Account
         eos.getAccount(item.account).then(res => {
           const lastVoteWeight = res["voter_info"]["last_vote_weight"];
           const delegated = lastVoteWeight / Math.pow(2, Math.round((new Date().getTime() / 1000 - 946684800)/(24 * 3600 * 7)) / 52) / 10000
           this.props.appActions.setProxyInfo({ account: item.account, icon: item.icon, delegated: delegated, producers: res["voter_info"]['producers'], winningAvg: winningAvg, dividendRate: dividendRate })
         })
+
+        });
       });
     });
 
