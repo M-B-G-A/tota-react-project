@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { Modal, Button, Form, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
-import { connect } from "react-redux";
-// import Eos from "eosjs";
-// import binaryen from "binaryen";
-import { eosJS, eos, eosMainnet } from "../../apis/eos";
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
-import { scatterNetwork, scatterRealNetwork } from "../../apis/scatter";
+import { scatterNetwork } from "../../apis/scatter";
 import { CommonUtil } from "../../utils";
 /* Betting Dialog */
 class BettingDialog extends Component {
@@ -20,7 +16,6 @@ class BettingDialog extends Component {
   }
 
   componentDidMount() {
-
   }
 
   handleChange = (e) => {
@@ -34,8 +29,6 @@ class BettingDialog extends Component {
     const scatter = ScatterJS.scatter;
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.voteproducer(this.props.account.name, this.props.selectedProxy.account, []).then(res => {
-      // res 체크
-      console.log(res);
       this.props.setUserProxy(this.props.selectedProxy);
       this.props.openBettingDialog(false)
     });
@@ -61,11 +54,6 @@ class BettingDialog extends Component {
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.contract('totatestgame').then(myaccount => {
       myaccount.insertcoin(this.props.account.name, CommonUtil.zero4(this.state.inputText) + " EOS", this.props.currentGame, this.props.accountInfo["voter_info"]["proxy"]).then(res => {
-        console.log('result', res);
-        // if (res["error"] !== null) {
-        // } else {
-        //   console.log(res["message"]);
-        // }
       });
       this.props.openBettingDialog(false);
     });

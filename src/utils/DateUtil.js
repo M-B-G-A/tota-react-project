@@ -7,7 +7,6 @@ class DateUtil {
 
   static getRemainingTime(end) {
     var now = new Date();
-    // console.log(endDate);
     if (end - now > 0) {
       return (end - now) / 1000;
     }

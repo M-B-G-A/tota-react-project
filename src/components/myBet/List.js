@@ -1,29 +1,8 @@
 import React from "react";
-import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from "react-bootstrap";
-import { compose } from "recompose";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import { Button, Table } from "react-bootstrap";
 import { CommonUtil, DateUtil } from "../../utils";
 
-const styles = {
-  root: {
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    display: 'flex',
-  },
-  row: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    display: 'flex',
-    paddingBottom: 20,
-  },
-};
-
 const List = (props) => {
-
   const onReceiveButtonClicked = (gameKey) => {
     props.onReceiveButtonClicked(gameKey);
   }
@@ -53,7 +32,7 @@ const List = (props) => {
               <td>{ CommonUtil.printGameResult(props.proxies, item["game"]["result"]) }</td>
               <td>{ CommonUtil.printTotalGameAmount(item["game"]["team1_asset"], item["game"]["team2_asset"]) }</td>
               <td>{ item["amount"] }</td>
-              <td>{ 0 }</td>
+              <td>{ (props.proxies[item.side - 1].dividendRate * 1.0) * CommonUtil.getAmount(item.amount, null) } EOS</td>
               <td>{ item["status"] === 1 ? (<Button disabled>수령하기</Button>) : (<Button onClick={() => onReceiveButtonClicked(item["game_key"])} >수령하기</Button>) }</td>
             </tr>
            )

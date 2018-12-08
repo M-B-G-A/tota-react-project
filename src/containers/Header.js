@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Button } from "react-bootstrap";
+import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { compose } from "recompose";
@@ -12,15 +12,6 @@ import * as routes from "../constants";
 import { scatterNetwork } from "../apis/scatter";
 import { eos } from "../apis/eos";
 import { CommonUtil } from "../utils";
-
-const styles = {
-  content: {
-    display: "flex",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-};
 
 class Header extends Component {
 
@@ -43,7 +34,6 @@ class Header extends Component {
 
       scatter.getIdentity(requiredFields).then(() => {
         const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-        console.log(account);
         this.props.appActions.setUserAccount(account);
         localStorage.setItem('account', account);
         // account Detail

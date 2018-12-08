@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from "react-bootstrap";
+import { Grid, Row } from "react-bootstrap";
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -31,9 +31,6 @@ const styles = {
 };
 
 class MyBet extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     if (this.props.account === null) {
       this.props.history.push(routes.HOME);

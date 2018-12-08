@@ -1,8 +1,5 @@
 import React from "react";
-import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from "react-bootstrap";
-import { compose } from "recompose";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import { Grid, Row } from "react-bootstrap";
 
 const styles = {
   root: {

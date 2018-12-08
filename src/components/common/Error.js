@@ -1,5 +1,5 @@
 import React from "react";
-import { Jumbotron, Button, Thumbnail } from "react-bootstrap"
+import { Jumbotron, Button } from "react-bootstrap"
 import { withRouter } from "react-router"
 import * as routes from "../../constants"
 
@@ -8,7 +8,7 @@ const Error = (props) => {
     <div style={{ width: '60%', alignItems: 'center', justifyContent: 'center' }}>
       <Jumbotron style={{ width: '100%', paddingLeft: '50px'  }}>
         <div style={{ paddingRight: '50px' }}>
-          <img src={ process.env.PUBLIC_URL + "Logo_line.png"} style={{ width: '50%', height: '50%' }} />
+          <img src={ process.env.PUBLIC_URL + "Logo_line.png"} style={{ width: '50%', height: '50%' }} alt='' />
         </div>
         <div>
           <h1>죄송합니다.</h1>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from "react-bootstrap";
+import { Grid, Row, Col } from "react-bootstrap";
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -27,10 +27,6 @@ const styles = {
   },
 };
 class Proxy extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     if (this.props.proxy === null) {
       this.props.history.push(routes.HOME);

@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavItem, SplitButton, MenuItem } from "react-bootstrap";
+import { Navbar, SplitButton, MenuItem } from "react-bootstrap";
 import { connect } from "react-redux";
 import { compose } from "recompose";
 import { withRouter } from "react-router";
 import { FormattedMessage } from "react-intl"
 import * as appActions from "../reducers/app";
 import { bindActionCreators } from "redux";
-
-const styles = {
-}
 
 class Footer extends Component {
 
@@ -19,7 +16,7 @@ class Footer extends Component {
   render() {
     return (
       <Navbar staticTop={true} style={{ marginBottom: 0 }}>
-        <Nav>
+        <div>
           <div style={{ marginTop: 20, marginBottom: 20 }}>
            {/* ToTa Logo */}
             <div style={{ display: 'table-row' }}>
@@ -59,7 +56,7 @@ class Footer extends Component {
               </div>
             </div>
           </div>
-        </Nav>
+        </div>
       </Navbar>
     );
   }

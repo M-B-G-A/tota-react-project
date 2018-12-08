@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Jumbotron, Button, Thumbnail, ProgressBar, Table } from "react-bootstrap";
+import { Grid, Row, Col, Button,  ProgressBar, Table } from "react-bootstrap";
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { Doughnut } from "react-chartjs";
 import { eos, eosMainnet } from "../../apis/eos";
 import { CommonUtil, DateUtil } from "../../utils";
 import BettingDialog from "./BettingDialog";
@@ -29,27 +28,7 @@ const styles = {
   },
 };
 
-const data1 = [
-	{
-		value: 20,
-		color:"#F7464A",
-		highlight: "#FF5A5E",
-    label: "Red",
-    text: "22",
-	},
-	{
-		value: 100,
-		color: "#46BFBD",
-		highlight: "#5AD3D1",
-		label: "Green"
-	},
-];
 class Landing extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     // 게임 가져오기
     eos.getTableRows({"scope": "totatestgame", "code": "totatestgame", "table": "games2", "json": true, "reverse": true}).then((res) => {
@@ -57,7 +36,6 @@ class Landing extends Component {
       this.props.appActions.setGames(games);
       // 현재 진행중인 게임 회차
       this.props.appActions.setCurrentGame(games[0]["key"]);
-      const totalGameCount = games.length - 1; // 총 게임 수
       this.props.proxies.map((item, index) => {
         // 현재 게임 예상 배당률
         const dividendRate = CommonUtil.getDividendRate(index, games[0]['team1_asset'], games[0]['team2_asset'])
@@ -66,27 +44,24 @@ class Landing extends Component {
           const proxy1Info = await eosMainnet.getAccount("totaproxyno1");
           const proxy2Info = await eosMainnet.getAccount("totaproxyno2");
           const producerList = await eosMainnet.getProducers(true, "", 21);
-          console.log(producerList);
           const producers1 = proxy1Info["voter_info"]["producers"];
           const array1 = [];
           for (const i of producers1) {
             array1.push(i)
           }
-          console.log(array1);
           const producers2 = proxy2Info["voter_info"]["producers"];
           const array2 = [];
           for (const i of producers2) {
             array2.push(i)
           }
-          console.log(array2);
           let count1 = 0;
           let count2 = 0;
 
           for(let producer of producerList.rows) {
-            if(producers1.indexOf(producer.owner) != -1){
+            if(producers1.indexOf(producer.owner) !== -1){
               count1 += 1;
             }
-            if(producers2.indexOf(producer.owner) != -1){
+            if(producers2.indexOf(producer.owner) !== -1){
               count2 += 1;
             }
           }
@@ -94,7 +69,7 @@ class Landing extends Component {
         };
         loadProxyRate().then(rateArr => {
           const winningAvg = rateArr[index];
-        
+
         // Proxy Account
         eos.getAccount(item.account).then(res => {
           const lastVoteWeight = res["voter_info"]["last_vote_weight"];
@@ -106,7 +81,7 @@ class Landing extends Component {
       });
     });
 
-   const timer = setInterval(() => {
+   setInterval(() => {
       if (this.props.games.length !== 0) {
         const remainingTime = DateUtil.getRemainingTime(this.props.games[0]["end_time"]);
         this.props.appActions.updateRemainingTime(remainingTime);
@@ -172,13 +147,13 @@ class Landing extends Component {
           {
             this.props.proxies.map((proxy, index) =>
               <Col md={6} key={index}>
-                <div style={{ backgroundColor: 'white' }} style={{ textAlign: 'center'}}>
+                <div style={{ backgroundColor: 'white', textAlign: 'center' }}>
                   <h4>{ proxy.icon } { proxy.name }</h4>
                   <div style={{ width: 142, height: 142, borderRadius: 71, border: 'solid 5px #979797', display: 'inline-block', marginTop: 30, marginBottom: 30, textAlign: 'center' }}>
                     <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                       <div>
                         현재      승률<br />
-                        <h4>{ proxy.winningAvg * 100 } %</h4>
+                        <h4>{ (proxy.winningAvg * 100).toFixed(2) } %</h4>
                       </div>
                     </div>
                   </div>
@@ -207,7 +182,7 @@ class Landing extends Component {
             {
               this.props.games.filter((g, i) => i !== 0).map((item, index) =>
               (
-                  <tbody>
+                  <tbody key={index}>
                     <tr>
                       <td>{ item.key + 1 }</td>
                       <td>{ DateUtil.parseDate(item.end_time) }</td>

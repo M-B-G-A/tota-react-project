@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Form, FormGroup, FormControl, HelpBlock } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { openDialog } from "../../reducers/app"
 

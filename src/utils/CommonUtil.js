@@ -22,12 +22,12 @@ class CommonUtil {
       if (teamAmount1 === 0) {
         return "-"
       }
-      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount1).toFixed(4)
+      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount1).toFixed(3)
     } else if (team === 1) {
       if (teamAmount2 === 0) {
         return "-"
       }
-      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount2).toFixed(4)
+      return (0.999 * (teamAmount1 + teamAmount2) / teamAmount2).toFixed(3)
     }
   }
 
