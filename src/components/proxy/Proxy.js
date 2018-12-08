@@ -70,12 +70,12 @@ class Proxy extends Component {
               {this.props.proxy.name} Proxy
               </h3>
             </Col>
-            <Col md={6} style={{ textAlign: 'right' }}>
+            {/* <Col md={6} style={{ textAlign: 'right' }}>
               <h3>총 {this.props.proxy.delegated.toFixed(4)}{' '}EOS</h3>
               <h3>
                위임 중
               </h3>
-            </Col>
+            </Col> */}
           </Row>
           <Row>
           <hr />

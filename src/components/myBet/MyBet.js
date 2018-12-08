@@ -37,8 +37,8 @@ class MyBet extends Component {
       return
     }
 
-    eos.getTableRows(true, "totatestgame", "totatestgame", "games2", "", 0, -1, this.props.currentGame).then((games) => {
-      eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame, "i64", "2").then((res) => {
+    eos.getTableRows(true, "totatestgame", "totatestgame", "games2", "", 0, -1, this.props.currentGame + 1).then((games) => {
+      eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame + 1, "i64", "2").then((res) => {
         let histories = res.rows.filter(history => history.game_key === this.props.currentGame)
         if (histories.length !== 0) {
           this.props.appActions.setCurrentGameAmount(CommonUtil.getAmount(histories[0].amount, 4));
@@ -81,7 +81,7 @@ class MyBet extends Component {
         <Grid>
           <Row className="show-grid">
           <div style={{ marginTop: 30, marginBottom: 30 }}>
-            <h4>이전회차 결과</h4>
+            <h4>나의 베팅</h4>
           </div>
           {this.props.dividendList.length === 0 ? (
             <div style={styles.row}>

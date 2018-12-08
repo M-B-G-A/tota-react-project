@@ -26,7 +26,7 @@ const List = (props) => {
           // props.dividendList.length === 0 ? null : (
           props.dividendList.map((item, index) =>
             // {item["game"] === undefined ? null : (
-            <tr>
+            <tr key={index}>
               <td>{ item["game_key"] + 1 }</td>
               <td>{ DateUtil.parseDate(item["game"]["end_time"]) }</td>
               <td>{ CommonUtil.printGameResult(props.proxies, item["game"]["result"]) }</td>

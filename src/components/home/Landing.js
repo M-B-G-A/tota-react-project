@@ -7,7 +7,10 @@ import { bindActionCreators } from "redux";
 import { eos, eosMainnet } from "../../apis/eos";
 import { CommonUtil, DateUtil } from "../../utils";
 import BettingDialog from "./BettingDialog";
-
+import { scatterNetwork } from "../../apis/scatter";
+import Eos from "eosjs";
+import ScatterJS from 'scatterjs-core';
+import ScatterEOS from 'scatterjs-plugin-eosjs';
 import * as appActions from "../../reducers/app";
 import * as proxyActions from "../../reducers/proxy";
 
@@ -104,12 +107,66 @@ class Landing extends Component {
     }
   }
 
-  openBettingDialog = (open, proxy) => {
-    if (this.props.account) {
-      if (open === true) {
-        this.props.appActions.setSelectedProxy(proxy);
+  getNewPermissions = async (accountName) => {
+    const account = await eos.getAccount(accountName);
+    const perms = JSON.parse(JSON.stringify(account.permissions));
+    let shouldUpdate = true;
+    for(const perm of perms) {
+      //console.log(perm);
+      if (perm.perm_name === this.props.account.authority) {
+        for(const account of perm.required_auth.accounts) {
+          if(account.permission.actor === "totatestgame" 
+            && account.permission.permission === "eosio.code") {
+            shouldUpdate = false;
+            break;
+          }
+        }
+        if (shouldUpdate) {
+          perm.required_auth.accounts.push({
+            permission: {
+              actor: "totatestgame",
+              permission: "eosio.code"
+            },
+            weight: 1
+          });
+        }
       }
-      this.props.appActions.openBettingDialog(open);
+    }
+    if (shouldUpdate) {
+      try {
+        ScatterJS.plugins(new ScatterEOS());
+        const scatter = ScatterJS.scatter;
+        const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
+        const updateAuthResult = await eos.transaction(tr => {
+          for(const perm of perms) {
+            if(perm.perm_name === this.props.account.authority) {
+              tr.updateauth({
+                account: accountName,
+                permission: perm.perm_name,
+                parent: perm.parent,
+                auth: perm.required_auth
+              }, {authorization: `${accountName}@${this.props.account.authority}`})
+            }
+          }
+        });
+      } catch(e) {
+        console.log(e);
+        return false;
+      }
+    }
+    return true;
+  }
+  openBettingDialog = async (open, proxy) => {
+    if (this.props.account) {
+      const result = await this.getNewPermissions(this.props.account.name);
+      if (result) {
+        if (open === true) {
+          this.props.appActions.setSelectedProxy(proxy);
+        }
+        this.props.appActions.openBettingDialog(open);
+      } else {
+        alert("missing authority");
+      }
     }
   }
 
