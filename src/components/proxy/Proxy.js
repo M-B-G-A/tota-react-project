@@ -53,12 +53,7 @@ class Proxy extends Component {
           firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.png`).getDownloadURL().then((url) => {
             this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
           }).catch((error) => {
-            firebase.storage.ref().child(`img/${this.props.proxy.name.toLowerCase()}/${producer.name}.jpg`).getDownloadURL().then((url) => {
-              this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: url });
-            }).catch((error) => {
-              console.error(error);
-              this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: "error" });
-            });
+            this.props.proxyActions.updateProxyProducerImage({ name: producer.name, image: process.env.PUBLIC_URL + "no_image.png" });
           });
         });
       }

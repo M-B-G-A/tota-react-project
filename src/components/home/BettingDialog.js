@@ -3,7 +3,7 @@ import { Modal, Button, Form, FormGroup, FormControl, HelpBlock, ControlLabel } 
 import { connect } from "react-redux";
 // import Eos from "eosjs";
 // import binaryen from "binaryen";
-import { eosJS } from "../../apis/eos";
+import { eosJS, eos } from "../../apis/eos";
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
@@ -15,10 +15,12 @@ class BettingDialog extends Component {
     super(props);
     this.state = {
       inputText: "",
+      error: "",
     };
   }
 
   componentDidMount() {
+
   }
 
   handleChange = (e) => {
@@ -28,6 +30,23 @@ class BettingDialog extends Component {
   }
 
   onBettingButtonClicked = () => {
+
+    if (this.state.inputText === "") {
+      this.setState({
+        error: "값을 입력해주세요.",
+      });
+      return
+    }
+
+    console.log(CommonUtil.getAmount(this.props.accountInfo.core_liquid_balance, null));
+    console.log(this.state.inputText)
+    if (this.state.inputText * 1.0 > CommonUtil.getAmount(this.props.accountInfo.core_liquid_balance, null)) {
+      this.setState({
+        error: "보유량보다 높습니다.",
+      });
+      return
+    }
+
     ScatterJS.plugins(new ScatterEOS());
     const scatter = ScatterJS.scatter;
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
@@ -48,9 +67,11 @@ class BettingDialog extends Component {
     return (
       <div>
         <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton style={{ border: 'none' }}>
             <Modal.Title>
-              { this.props.currentGame + 1 } 라운드 베팅하기
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                { this.props.currentGame + 1 } 라운드 베팅하기
+              </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -70,17 +91,25 @@ class BettingDialog extends Component {
                   style={{ marginRight: 10, marginLeft: 10, border: 'none', boxShadow: 'none', borderBottom: 'solid 1px #979797', borderRadius: '0' }}
                 />
                 {' '}<ControlLabel>EOS</ControlLabel>
+                <FormControl.Feedback />
+                <HelpBlock style={{ color: 'red' }}>{ this.state.error }</HelpBlock>
               </FormGroup>
             </Form>
+            <div style={{ width: '100%', textAlign: 'right', paddingRight: 120 }}>
+              나의 보유량 : { this.props.accountInfo.core_liquid_balance }
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button
-              bsStyle="info"
-              bsSize="large"
-              onClick={() => this.onBettingButtonClicked()}
-            >
-              베팅하기
-            </Button>
+          <Modal.Footer style={{ border: 'none' }}>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              <Button
+                bsStyle="info"
+                bsSize="large"
+                onClick={() => this.onBettingButtonClicked()}
+                style={{ width: '50%', height: '92' }}
+              >
+                베팅하기
+              </Button>
+            </div>
           </Modal.Footer>
         </Modal>
       </div>

@@ -45,7 +45,7 @@ class Header extends Component {
           if (proxy.length !== 0) {
             this.props.proxyActions.setUserProxy(proxy[0]);
           }
-        })
+        });
       }).catch(error => {
         console.error(error);
       });

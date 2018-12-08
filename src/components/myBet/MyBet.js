@@ -62,7 +62,8 @@ class MyBet extends Component {
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.contract('totatestgame').then(myaccount => {
       myaccount.dropcoin(this.props.account.name, gameKey).then(res => {
-        console.log('result', res);
+        this.props.appActions.setDialogMessage({ title: "수령 완료", content: "EOS 수령이 완료되었습니다." })
+        this.props.appActions.openDialog(true);
       });
     });
   }

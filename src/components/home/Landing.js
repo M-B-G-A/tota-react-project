@@ -77,6 +77,9 @@ class Landing extends Component {
   }
 
   printRemainingTime() {
+    if (this.props.remainingTime === 0) {
+      return "종료되었습니다. 다음 회차를 기다려주세요.";
+    }
     if (this.props.remainingTime !== null) {
       const remain = this.props.remainingTime;
       const D = Math.floor(remain / 86400);
@@ -109,7 +112,7 @@ class Landing extends Component {
           </Row>
           <Row className="show-grid">
             <Col>
-              <ProgressBar bsStyle="info" active now={86400 - this.props.remainingTime} max={86400} />
+              <ProgressBar bsStyle="info" active now={1800 - this.props.remainingTime} max={1800} />
             </Col>
           </Row>
           <Row className="show-grid" style={styles.row}>
@@ -168,7 +171,7 @@ class Landing extends Component {
               (
                   <tbody>
                     <tr>
-                      <td>{ item.key }</td>
+                      <td>{ item.key + 1 }</td>
                       <td>{ DateUtil.parseDate(item.end_time) }</td>
                       <td>
                         {  CommonUtil.printGameResult(this.props.proxies, item.result) }
