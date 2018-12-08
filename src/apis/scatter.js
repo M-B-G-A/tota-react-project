@@ -19,5 +19,6 @@ const devNetworkOptions = {
 
 // process.env.NODE_ENV === "production" ? prodNetworkOptions : devNetworkOptions;
 const scatterNetwork = devNetworkOptions;
+const scatterRealNetwork = prodNetworkOptions;
 
-export { scatterNetwork };
+export { scatterNetwork, scatterRealNetwork };

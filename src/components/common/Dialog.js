@@ -11,7 +11,7 @@ const Dialog = (props) => {
   return (
     <div>
       <Modal show={isOpenDialog} onHide={() => {openDialog(false)}}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={{ border: 'none' }}>
           <Modal.Title>
             { dialogMessage.title }
           </Modal.Title>

@@ -44,6 +44,14 @@ const data1 = [
 	},
 ];
 class Landing extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedProxy: null,
+    };
+  }
+
   componentDidMount() {
     // 게임 가져오기
     eos.getTableRows({"scope": "totatestgame", "code": "totatestgame", "table": "games2", "json": true, "reverse": true}).then((res) => {
@@ -78,7 +86,7 @@ class Landing extends Component {
 
   printRemainingTime() {
     if (this.props.remainingTime === 0) {
-      return "종료되었습니다. 다음 회차를 기다려주세요.";
+      return
     }
     if (this.props.remainingTime !== null) {
       const remain = this.props.remainingTime;
@@ -91,13 +99,9 @@ class Landing extends Component {
     }
   }
 
-  openBettingDialog = (open) => {
-    if (this.props.proxy !== null) {
-      this.props.appActions.openBettingDialog(open);
-    } else {
-      this.props.appActions.setDialogMessage({ title: "지지하는 프록시가 없습니다.", content: "프록시를 설정해주세요." });
-      this.props.appActions.openDialog(true);
-    }
+  openBettingDialog = (open, proxy) => {
+    this.setState({ selectedProxy: proxy });
+    this.props.appActions.openBettingDialog(open);
   }
 
   render() {
@@ -145,7 +149,7 @@ class Landing extends Component {
                     </div>
                   </div>
                   <h4>{ proxy.delegated.toFixed(4) } EOS 위임중</h4>
-                  <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.openBettingDialog(true)}>
+                  <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.openBettingDialog(true, proxy)}>
                     베팅하기
                   </Button>
                   <div>승리시 { proxy.dividendRate } 배 획득 예상</div>
@@ -192,6 +196,7 @@ class Landing extends Component {
           proxies={this.props.proxies}
           proxy={this.props.proxy}
           currentGame={this.props.currentGame}
+          selectedProxy={this.state.selectedProxy}
         />
       </div>
     );

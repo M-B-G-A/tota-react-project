@@ -23,11 +23,20 @@ const styles = {
 
 class Header extends Component {
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      status: "",
+    };
+  }
 
+  componentDidMount() {
     ScatterJS.plugins( new ScatterEOS() );
     ScatterJS.scatter.connect('ToTa').then(connected => {
-      if(!connected) return false;
+      if(!connected) {
+        this.setState({ status: "스캐터를 설치해주세요." });
+        return false;
+      };
       const scatter = ScatterJS.scatter;
       const requiredFields = { accounts:[scatterNetwork] };
 
@@ -47,6 +56,7 @@ class Header extends Component {
           }
         });
       }).catch(error => {
+        this.setState({ status: "로그인 필요" });
         console.error(error);
       });
     });
@@ -99,7 +109,7 @@ class Header extends Component {
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={1}>
-              <u>{ this.props.account === null ? "로그인 필요" : this.props.account.name }</u>
+              <u>{ this.props.account === null ? this.state.status : this.props.account.name }</u>
             </NavItem>
           </Nav>
         </Navbar.Collapse>
