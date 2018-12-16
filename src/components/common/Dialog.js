@@ -1,7 +1,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
-import { openDialog } from "../../reducers/app"
+import { openDialog } from "../../reducers/app";
+import { FormattedHTMLMessage } from "react-intl"
 
 const Dialog = (props) => {
   const {
@@ -13,11 +14,11 @@ const Dialog = (props) => {
       <Modal show={isOpenDialog} onHide={() => {openDialog(false)}}>
         <Modal.Header closeButton style={{ border: 'none' }}>
           <Modal.Title>
-            { dialogMessage.title }
+            <FormattedHTMLMessage id={ dialogMessage.title } />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { dialogMessage.content }
+          <FormattedHTMLMessage id={ dialogMessage.content } />
         </Modal.Body>
         {/* <Modal.Footer>
           <Button

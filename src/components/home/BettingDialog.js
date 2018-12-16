@@ -5,6 +5,8 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
 import { scatterNetwork } from "../../apis/scatter";
 import { CommonUtil } from "../../utils";
+import { FormattedHTMLMessage } from "react-intl";
+
 /* Betting Dialog */
 class BettingDialog extends Component {
   constructor(props) {
@@ -37,14 +39,14 @@ class BettingDialog extends Component {
   onBettingButtonClicked = () => {
     if (this.state.inputText === "") {
       this.setState({
-        error: "값을 입력해주세요.",
+        error: "input_error_empty_value",
       });
       return
     }
 
     if (this.state.inputText * 1.0 > CommonUtil.getAmount(this.props.accountInfo.core_liquid_balance, null)) {
       this.setState({
-        error: "보유량보다 높습니다.",
+        error: "input_error_insufficient_amount",
       });
       return
     }
@@ -63,51 +65,20 @@ class BettingDialog extends Component {
     if (this.props.isOpenBettingDialog === false) {
       return null;
     }
-    if (this.props.proxy !== this.props.selectedProxy && this.props.selectedProxy !== null) {
+    if (this.props.selectedProxy !== null && this.props.props !== null && this.props.selectedProxy.name === this.props.proxy.name) {
       return (
         <div>
-          <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
-          <Modal.Header closeButton style={{ border: 'none' }}>
-            <Modal.Title>
-              <div style={{ width: '100%', textAlign: 'center' }}>
-                { this.props.proxy === null ? '지지하는 프록시가 없습니다.' : '지지하는 프록시 변경하기' }
-              </div>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div style={{ width:'100%', textAlign: 'center' }}>
-              { this.props.selectedProxy.name } 를 지지하시겠습니까?
-            </div>
-          </Modal.Body>
-          <Modal.Footer style={{ border: 'none' }}>
-            <div style={{ width: '100%', textAlign: 'center' }}>
-              <Button
-                bsStyle="info"
-                bsSize="large"
-                onClick={() => this.updateProducerVote()}
-                style={{ width: '50%', height: '92' }}
-              >
-                지지하기
-              </Button>
-            </div>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      )
-    }
-    return (
-      <div>
         <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
           <Modal.Header closeButton style={{ border: 'none' }}>
             <Modal.Title>
               <div style={{ width: '100%', textAlign: 'center' }}>
-                { this.props.currentGame + 1 } 라운드 베팅하기
+                <FormattedHTMLMessage id="bet_popup_title" values={{ value: this.props.currentGame + 1 }} />
               </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div style={{ width:'100%', textAlign: 'center' }}>
-              나의 지지 프록시 : { this.props.proxy.name }
+              <FormattedHTMLMessage id="bet_delegate_proxy" values={{ value: this.props.proxy.name }} />
             </div>
             <Form inline style={{ marginTop: 20, padding: 10, textAlign: 'center' }}>
               <FormGroup
@@ -123,11 +94,11 @@ class BettingDialog extends Component {
                 />
                 {' '}<ControlLabel>EOS</ControlLabel>
                 <FormControl.Feedback />
-                <HelpBlock style={{ color: 'red' }}>{ this.state.error }</HelpBlock>
+                <HelpBlock style={{ color: 'red' }}>{ this.state.error === "" ? null : (<FormattedHTMLMessage id={this.state.error} />) }</HelpBlock>
               </FormGroup>
             </Form>
             <div style={{ width: '100%', textAlign: 'right', paddingRight: 120 }}>
-              나의 보유량 : { this.props.accountInfo.core_liquid_balance }
+              <FormattedHTMLMessage id="bet_proxy_my_account" />{' '}:{' '}{ this.props.accountInfo.core_liquid_balance }
             </div>
           </Modal.Body>
           <Modal.Footer style={{ border: 'none' }}>
@@ -138,13 +109,47 @@ class BettingDialog extends Component {
                 onClick={() => this.onBettingButtonClicked()}
                 style={{ width: '50%', height: '92' }}
               >
-                베팅하기
+                <FormattedHTMLMessage id="bet_proxy_btn" />
               </Button>
             </div>
           </Modal.Footer>
         </Modal>
       </div>
-    );
+      )
+    }
+    if (this.props.selectedProxy !== null) {
+      return (
+        <div>
+          <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
+          <Modal.Header closeButton style={{ border: 'none' }}>
+            <Modal.Title>
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                { this.props.proxy === null ? (<FormattedHTMLMessage id="main_bet_alert" />) : (<FormattedHTMLMessage id="proxy_change_title" />) }
+              </div>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div style={{ width:'100%', textAlign: 'center' }}>
+              <FormattedHTMLMessage id="main_bet_delegate_desc2" values={{ value: this.props.selectedProxy.name }} />
+            </div>
+          </Modal.Body>
+          <Modal.Footer style={{ border: 'none' }}>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              <Button
+                bsStyle="info"
+                bsSize="large"
+                onClick={() => this.updateProducerVote()}
+                style={{ width: '50%', height: '92' }}
+              >
+                <FormattedHTMLMessage id="main_bet_delegate_btn" />
+              </Button>
+            </div>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )
+    }
+    return null;
   };
 }
 export default BettingDialog;

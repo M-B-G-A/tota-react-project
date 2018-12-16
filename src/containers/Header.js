@@ -12,13 +12,14 @@ import * as routes from "../constants";
 import { scatterNetwork } from "../apis/scatter";
 import { eos } from "../apis/eos";
 import { CommonUtil } from "../utils";
+import { FormattedHTMLMessage } from "react-intl";
 
 class Header extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      status: "",
+      status: "scatter_warning2",
     };
   }
 
@@ -26,7 +27,7 @@ class Header extends Component {
     ScatterJS.plugins( new ScatterEOS() );
     ScatterJS.scatter.connect('ToTa').then(connected => {
       if(!connected) {
-        this.setState({ status: "스캐터를 설치해주세요." });
+        this.setState({ status: "scatter_warning1" });
         return false;
       };
       const scatter = ScatterJS.scatter;
@@ -54,7 +55,7 @@ class Header extends Component {
           }
         });
       }).catch(error => {
-        this.setState({ status: "로그인 필요" });
+        this.setState({ status: "scatter_warning2" });
         console.error(error);
       });
     });
@@ -67,7 +68,7 @@ class Header extends Component {
     }
 
     if (route === routes.PROXY && this.props.proxy === null) {
-      this.props.appActions.setDialogMessage({ title: "지지하는 프록시가 없습니다.", content: "프록시를 설정해주세요." });
+      this.props.appActions.setDialogMessage({ title: "main_bet_alert", content: "main_bet_delegate_desc2" });
       this.props.appActions.openDialog(true);
       return
     }
@@ -107,7 +108,7 @@ class Header extends Component {
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={1}>
-              <u>{ this.props.account === null ? this.state.status : this.props.account.name }</u>
+              <u>{ this.props.account === null ? (<FormattedHTMLMessage id={this.state.status} />) : this.props.account.name }</u>
             </NavItem>
           </Nav>
         </Navbar.Collapse>

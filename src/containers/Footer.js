@@ -3,13 +3,22 @@ import { Navbar, SplitButton, MenuItem } from "react-bootstrap";
 import { connect } from "react-redux";
 import { compose } from "recompose";
 import { withRouter } from "react-router";
-import { FormattedMessage } from "react-intl"
+import { FormattedHTMLMessage, FormattedMessage } from "react-intl"
 import * as appActions from "../reducers/app";
 import { bindActionCreators } from "redux";
 
 class Footer extends Component {
 
+  componentWillMount() {
+    const userSiteLanguage = localStorage.tota_userSiteLanguage;
+    console.log(userSiteLanguage)
+    if (userSiteLanguage) {
+      this.props.appActions.setUserSiteLanguage(JSON.parse(userSiteLanguage))
+    }
+  }
+
   handleSelectLanguage = (key, event) => {
+    localStorage.setItem('tota_userSiteLanguage', JSON.stringify(key))
     this.props.appActions.setUserSiteLanguage(key)
   };
 
@@ -21,7 +30,7 @@ class Footer extends Component {
            {/* ToTa Logo */}
             <div style={{ display: 'table-row' }}>
               <img src= { process.env.PUBLIC_URL + "Logo_line.png" } alt="" style={{ width: 80, height: 20, marginRight: 20 }} />
-              프로젝트 토타
+              <FormattedHTMLMessage id="footer_title" />
             </div>
             {/* GitHub */}
             <div style={{ display: 'table-row' }}>

@@ -2,6 +2,7 @@ import React from "react";
 import { Jumbotron, Button } from "react-bootstrap"
 import { withRouter } from "react-router"
 import * as routes from "../../constants"
+import { FormattedHTMLMessage } from "react-intl"
 
 const Error = (props) => {
   return (
@@ -11,13 +12,13 @@ const Error = (props) => {
           <img src={ process.env.PUBLIC_URL + "Logo_line.png"} style={{ width: '50%', height: '50%' }} alt='' />
         </div>
         <div>
-          <h1>죄송합니다.</h1>
+          <h1><FormattedHTMLMessage id="error_title" /></h1>
           <p>
-            찾으시는 페이지가 없습니다.
+            <FormattedHTMLMessage id="error_subtitle" />
           </p>
           <p>
             <Button bsStyle="primary" onClick={() => {props.history.push(routes.HOME)}}>
-              홈으로 이동
+              <FormattedHTMLMessage id="error_button" />
             </Button>
           </p>
         </div>

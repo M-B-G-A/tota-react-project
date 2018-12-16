@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { CommonUtil, DateUtil } from "../../utils";
+import { FormattedHTMLMessage } from "react-intl";
 
 const List = (props) => {
   const onReceiveButtonClicked = (gameKey) => {
@@ -12,12 +13,12 @@ const List = (props) => {
       <Table>
         <thead>
           <tr>
-            <th>회차</th>
-            <th>종료 시간</th>
-            <th>승리 PROXY</th>
-            <th>총 베팅 EOS</th>
-            <th>나의 베팅 EOS</th>
-            <th>나의 배당 EOS</th>
+            <th><FormattedHTMLMessage id="bet_history_period" /></th>
+            <th><FormattedHTMLMessage id="bet_history_time" /></th>
+            <th><FormattedHTMLMessage id="bet_history_winning" /></th>
+            <th><FormattedHTMLMessage id="bet_history_total" /></th>
+            <th><FormattedHTMLMessage id="bet_history_my" /></th>
+            <th><FormattedHTMLMessage id="bet_history_rewords" /></th>
             <th></th>
           </tr>
         </thead>
@@ -33,7 +34,7 @@ const List = (props) => {
               <td>{ CommonUtil.printTotalGameAmount(item["game"]["team1_asset"], item["game"]["team2_asset"]) }</td>
               <td>{ item["amount"] }</td>
               <td>{ (props.proxies[item.side - 1].dividendRate * 1.0) * CommonUtil.getAmount(item.amount, null) } EOS</td>
-              <td>{ item["status"] === 1 ? (<Button disabled>수령하기</Button>) : (<Button onClick={() => onReceiveButtonClicked(item["game_key"])} >수령하기</Button>) }</td>
+              <td>{ item["status"] === 1 ? (<Button disabled><FormattedHTMLMessage id="bet_history_claim_btn" /></Button>) : (<Button onClick={() => onReceiveButtonClicked(item["game_key"])} ><FormattedHTMLMessage id="bet_history_claim_btn" /></Button>) }</td>
             </tr>
            )
           }

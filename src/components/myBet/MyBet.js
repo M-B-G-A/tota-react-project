@@ -13,6 +13,7 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
 import { scatterNetwork } from "../../apis/scatter";
 import { CommonUtil } from "../../utils";
+import { FormattedHTMLMessage } from "react-intl";
 
 const styles = {
   root: {
@@ -65,7 +66,7 @@ class MyBet extends Component {
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.contract('totatestgame').then(myaccount => {
       myaccount.dropcoin(this.props.account.name, gameKey).then(res => {
-        this.props.appActions.setDialogMessage({ title: "수령 완료", content: "EOS 수령이 완료되었습니다." })
+        this.props.appActions.setDialogMessage({ title: "claim_complete_title", content: "claim_complete_subtitle" })
         this.props.appActions.openDialog(true);
       });
     });
@@ -81,7 +82,7 @@ class MyBet extends Component {
         <Grid>
           <Row className="show-grid">
           <div style={{ marginTop: 30, marginBottom: 30 }}>
-            <h4>나의 베팅</h4>
+            <h4><FormattedHTMLMessage id="my_bet_title" /></h4>
           </div>
           {this.props.dividendList.length === 0 ? (
             <div style={styles.row}>

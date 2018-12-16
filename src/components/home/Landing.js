@@ -13,6 +13,7 @@ import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import * as appActions from "../../reducers/app";
 import * as proxyActions from "../../reducers/proxy";
+import { FormattedHTMLMessage } from "react-intl";
 
 const styles = {
   root: {
@@ -103,7 +104,7 @@ class Landing extends Component {
       const M = Math.floor((remain - H * 3600) / 60 % 60);
       const S = Math.floor((remain - M * 60) % 60);
 
-      return H + "시간 " + M + "분 " + S + "초";
+      return (<FormattedHTMLMessage id= "main_period_time" values={{ hour: H, minute: M, second: S }}/>)
     }
   }
 
@@ -175,7 +176,7 @@ class Landing extends Component {
       <div style={styles.root}>
         <Grid style={{ paddingTop: 50 }}>
           <Row className="show-grid" style={{ alignItems: 'center', justifyContent: 'center', height: '100%', display: 'flex' }}>
-            { this.props.currentGame + 1 } 회차 종료까지
+            <FormattedHTMLMessage id="main_period_title" values={{ value: this.props.currentGame + 1 }} />
           </Row>
           <Row className="show-grid" style={styles.row}>
             <h3>{ this.printRemainingTime() }</h3>
@@ -187,7 +188,7 @@ class Landing extends Component {
           </Row>
           <Row className="show-grid" style={styles.row}>
             <Col>
-              <h3>이번 라운드 베팅 {' '}
+              <h3><FormattedHTMLMessage id="main_period_bet_desc" /> {' '}
                 <b>
                 {
                   this.props.games.length === 0 ? null :
@@ -209,16 +210,16 @@ class Landing extends Component {
                   <div style={{ width: 142, height: 142, borderRadius: 71, border: 'solid 5px #979797', display: 'inline-block', marginTop: 30, marginBottom: 30, textAlign: 'center' }}>
                     <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                       <div>
-                        현재      승률<br />
+                        <FormattedHTMLMessage id="main_period_winning" /> <br />
                         <h4>{ (proxy.winningAvg * 100).toFixed(2) } %</h4>
                       </div>
                     </div>
                   </div>
-                  <h4>{ proxy.delegated.toFixed(4) } EOS 위임중</h4>
+                  <h4> <FormattedHTMLMessage id="main_period_bet" values={{ value: proxy.delegated.toFixed(4) }} /></h4>
                   <Button bsStyle="info" bsSize="large" style={{ marginTop: 50, marginBottom: 10, width: 200 }} onClick={() => this.openBettingDialog(true, proxy)}>
-                    베팅하기
+                    <FormattedHTMLMessage id="main_bet_btn" />
                   </Button>
-                  <div>승리시 { proxy.dividendRate } 배 획득 예상</div>
+                  <div> <FormattedHTMLMessage id="main_bet_desc"  values={{ value: proxy.dividendRate }}/></div>
                 </div>
               </Col>
             )
@@ -228,12 +229,15 @@ class Landing extends Component {
           { /* Game Histories */ }
           <Row className="show-grid">
           <div style={{ marginTop: 30, marginBottom: 30 }}>
-            <h4>이전회차 결과</h4>
+            <h4><FormattedHTMLMessage id="main_period_desc" /></h4>
           </div>
           <Table>
             <thead>
               <tr>
-                <th>회차</th><th>종료 시간</th><th>승리 PROXY</th><th>총 베팅 EOS</th>
+                <th><FormattedHTMLMessage id="bet_history_period" /></th>
+                <th><FormattedHTMLMessage id="bet_history_time" /></th>
+                <th><FormattedHTMLMessage id="bet_history_winning" /></th>
+                <th><FormattedHTMLMessage id="bet_history_total" /></th>
               </tr>
             </thead>
             {

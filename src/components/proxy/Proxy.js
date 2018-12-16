@@ -9,6 +9,7 @@ import * as proxyActions from "../../reducers/proxy";
 import { eosMainnet } from "../../apis/eos";
 import * as routes from "../../constants";
 import { firebase } from "../../apis/firebase";
+import { FormattedHTMLMessage } from "react-intl"
 
 const styles = {
   root: {
@@ -65,7 +66,7 @@ class Proxy extends Component {
         <Grid>
           <Row style={{ paddingBottom: 30 }}>
             <Col md={6}>
-              <h3>지지중인 프록시</h3>
+              <h3><FormattedHTMLMessage id="proxy_main_title" /></h3>
               <h3>
               {this.props.proxy.name} Proxy
               </h3>
@@ -81,7 +82,7 @@ class Proxy extends Component {
           <hr />
           <Row style={{ paddingBottom: 30 }}>
             <Col md={6}>
-              <h3>프록시의 투표 리스트</h3>
+              <h3><FormattedHTMLMessage id="proxy_delegae_list" /></h3>
             </Col>
           </Row>
             {
@@ -102,16 +103,16 @@ class Proxy extends Component {
           <hr />
           <Row style={{ paddingBottom: 30 }}>
             <Col md={6}>
-              <h3>{this.props.currentGame + 1} 회차 나의 배팅 내역</h3>
+              <h3><FormattedHTMLMessage id="period_bet_history_title" values={{ value: this.props.currentGame + 1 }} /></h3>
             </Col>
             <Col md={6} style={{ textAlign: 'right' }}>
-              <h3>총 { this.props.currentGameAmount } EOS</h3>
+              <h3><FormattedHTMLMessage id="period_bet_total" values={{ value: this.props.currentGameAmount}} /></h3>
             </Col>
           </Row>
           <Row style={{ paddingBottom: 30 }}>
             <Col md={6}>
-              <p>배팅 기록은 회차의 시작지점을 기점으로 시간을 기록합니다. 모든 회차는 23시간 안에 종료됩니다.</p>
-              <p>23 : 00 : 00 이 되는 시점에는 베팅기록이 모두 청산되며 나의 배당내역에서 해당 회차의 배당을 받을 수 있습니다.</p>
+              <p><FormattedHTMLMessage id="period_bet_history_desc1" /></p>
+              <p><FormattedHTMLMessage id="period_bet_history_desc2" /></p>
             </Col>
           </Row>
           {/* <Row style={{ paddingBottom: 30 }}>

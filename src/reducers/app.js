@@ -63,11 +63,11 @@ const initialState = {
       dividendRate: 0.0,
     }
   ],
-  currentGame: null,
+  currentGame: 0,
   games: [],
   dividendList: [], // 나의 배당 내역
   isOpenBettingDialog: false,
-  remainingTime: null,
+  remainingTime: 0,
   userSiteLanguage: navigator.language.split('-')[0],
   siteLanguages: ["ko", "en"], // 지원하는 사이트 언어들
   dialogMessage: {

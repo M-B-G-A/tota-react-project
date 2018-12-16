@@ -33,7 +33,7 @@ class CommonUtil {
 
   static printGameResult = (proxies, result) => {
     if (proxies.length < result) {
-      return "무승부"
+      return "period_desc3"
     }
 
     if (result === 0) { // 진행 중
