@@ -32,7 +32,7 @@ class BettingDialog extends Component {
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.voteproducer(this.props.account.name, this.props.selectedProxy.account, []).then(res => {
       this.props.setUserProxy(this.props.selectedProxy);
-      this.props.openBettingDialog(false)
+      this.props.openBettingDialog(true, this.props.selectedProxy)
     });
   }
 
@@ -55,9 +55,21 @@ class BettingDialog extends Component {
     const scatter = ScatterJS.scatter;
     const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
     eos.contract('totatestgame').then(myaccount => {
-      myaccount.insertcoin(this.props.account.name, CommonUtil.zero4(this.state.inputText) + " EOS", this.props.currentGame, this.props.accountInfo["voter_info"]["proxy"]).then(res => {
+      const option = {authorization: `${this.props.account.name}@${this.props.account.authority}`};
+      myaccount.insertcoin(this.props.account.name, 
+        CommonUtil.zero4(this.state.inputText) + " EOS", this.props.currentGame, 
+        this.props.accountInfo["voter_info"]["proxy"],
+        option
+      ).then(res => {
+        console.log(res);
+        this.props.openBettingDialog(false);
+      }).catch(err => {
+        if (err.message === void 0) {
+          alert(err);
+        } else {
+          alert(err.message);
+        }
       });
-      this.props.openBettingDialog(false);
     });
   }
 
@@ -65,7 +77,7 @@ class BettingDialog extends Component {
     if (this.props.isOpenBettingDialog === false) {
       return null;
     }
-    if (this.props.selectedProxy !== null && this.props.props !== null && this.props.selectedProxy.name === this.props.proxy.name) {
+    if (this.props.selectedProxy !== null && this.props.proxy !== null && this.props.selectedProxy.name === this.props.proxy.name) {
       return (
         <div>
         <Modal show={this.props.isOpenBettingDialog} onHide={() => {this.props.openBettingDialog(false)}}>
