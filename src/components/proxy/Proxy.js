@@ -4,11 +4,14 @@ import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
+import Eos from "eosjs";
+import ScatterJS from "scatterjs-core";
+import ScatterEOS from "scatterjs-plugin-eosjs";
+import { scatterNetwork } from "../../config/scatter";
 import * as appActions from "../../reducers/app";
 import * as proxyActions from "../../reducers/proxy";
-import { eosMainnet } from "../../apis/eos";
 import * as routes from "../../constants";
-import { firebase } from "../../apis/firebase";
+import * as firebase from "../../config/firebase";
 import { FormattedHTMLMessage } from "react-intl"
 
 const styles = {
@@ -28,13 +31,17 @@ const styles = {
   },
 };
 class Proxy extends Component {
+
   componentDidMount() {
     if (this.props.proxy === null) {
       this.props.history.push(routes.HOME);
       return
     }
-    // Proxy의 BP들은 Mainnet에서 가져온다.
-    eosMainnet.getAccount(this.props.proxy.account).then(res => {
+
+
+    let eos = ScatterJS.scatter.eos(scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] });
+
+    eos.getAccount(this.props.proxy.account).then(res => {
       const producers = res["voter_info"]["producers"];
       const array = [];
       for (let i in producers) {

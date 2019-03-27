@@ -6,7 +6,7 @@ import { devToolsEnhancer } from "redux-devtools-extension";
 import rootReducer from "./reducers";
 
 import { Provider } from "react-redux";
-import App from "./containers/App";
+import App from "./App.js";
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';

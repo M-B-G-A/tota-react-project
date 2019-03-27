@@ -6,12 +6,11 @@ import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import * as appActions from "../../reducers/app";
 import List from "../myBet/List";
-import { eos } from "../../apis/eos";
 import * as routes from "../../constants";
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
-import { scatterNetwork } from "../../apis/scatter";
+import { scatterNetwork } from "../../config/scatter";
 import { CommonUtil } from "../../utils";
 import { FormattedHTMLMessage } from "react-intl";
 
@@ -37,6 +36,8 @@ class MyBet extends Component {
       this.props.history.push(routes.HOME);
       return
     }
+
+    let eos = ScatterJS.scatter.eos(scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] });
 
     eos.getTableRows(true, "totatestgame", "totatestgame", "games2", "", 0, -1, this.props.currentGame + 1).then((games) => {
       eos.getTableRows(true, "totatestgame", "totatestgame", "histories2", "", this.props.account.name, this.props.account.name, this.props.currentGame + 1, "i64", "2").then((res) => {

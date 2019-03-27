@@ -6,11 +6,11 @@ import { compose } from "recompose";
 import { withRouter } from "react-router";
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
+import Eos from "eosjs";
 import * as appActions from "../reducers/app";
 import * as proxyActions from "../reducers/proxy";
 import * as routes from "../constants";
-import { scatterNetwork } from "../apis/scatter";
-import { eos } from "../apis/eos";
+import { scatterNetwork } from "../config/scatter";
 import { CommonUtil } from "../utils";
 import { FormattedHTMLMessage } from "react-intl";
 
@@ -25,6 +25,7 @@ class Header extends Component {
 
   componentDidMount() {
     ScatterJS.plugins( new ScatterEOS() );
+    
     ScatterJS.scatter.connect('ToTa').then(connected => {
       if(!connected) {
         this.setState({ status: "scatter_warning1" });
@@ -37,6 +38,7 @@ class Header extends Component {
         const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
         this.props.appActions.setUserAccount(account);
         localStorage.setItem('account', account);
+        let eos = ScatterJS.scatter.eos(scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] });
         // account Detail
         eos.getAccount(account.name).then(res => {
           this.props.appActions.setUserAccountInfo(res);

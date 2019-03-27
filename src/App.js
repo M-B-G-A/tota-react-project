@@ -1,15 +1,15 @@
 import React, { Component }  from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
-import * as routes from "../constants";
-import Header from "./Header";
-import Footer from "./Footer";
-import Landing from "../components/home/Landing";
-import MyBet from "../components/myBet/MyBet"
-import Proxy from "../components/proxy/Proxy";
-import Info from "../components/info/Info";
-import Error from "../components/common/Error";
-import Dialog from "../components/common/Dialog";
+import * as routes from "./constants";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Landing from "./components/home/Landing";
+import MyBet from "./components/myBet/MyBet"
+import Proxy from "./components/proxy/Proxy";
+import Info from "./components/info/Info";
+import Error from "./components/common/Error";
+import Dialog from "./components/common/Dialog";
 
 const styles = {
   wrapper: {

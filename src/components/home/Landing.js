@@ -4,13 +4,12 @@ import { compose } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { eos, eosMainnet } from "../../apis/eos";
 import { CommonUtil, DateUtil } from "../../utils";
 import BettingDialog from "./BettingDialog";
-import { scatterNetwork } from "../../apis/scatter";
+import { scatterNetwork } from "../../config/scatter";
 import Eos from "eosjs";
-import ScatterJS from 'scatterjs-core';
-import ScatterEOS from 'scatterjs-plugin-eosjs';
+import ScatterJS from "scatterjs-core";
+import ScatterEOS from "scatterjs-plugin-eosjs";
 import * as appActions from "../../reducers/app";
 import * as proxyActions from "../../reducers/proxy";
 import { FormattedHTMLMessage } from "react-intl";
@@ -35,6 +34,7 @@ const styles = {
 class Landing extends Component {
   componentDidMount() {
     // 게임 가져오기
+    let eos = ScatterJS.scatter.eos(scatterNetwork, Eos);
     eos.getTableRows({"scope": "totatestgame", "code": "totatestgame", "table": "games2", "json": true, "reverse": true}).then((res) => {
       const games = res.rows;
       this.props.appActions.setGames(games);
@@ -45,9 +45,9 @@ class Landing extends Component {
         const dividendRate = CommonUtil.getDividendRate(index, games[0]['team1_asset'], games[0]['team2_asset'])
         // Proxy 승률
         const loadProxyRate = async function () {
-          const proxy1Info = await eosMainnet.getAccount("totaproxyno1");
-          const proxy2Info = await eosMainnet.getAccount("totaproxyno2");
-          const producerList = await eosMainnet.getProducers(true, "", 21);
+          const proxy1Info = await eos.getAccount("totaproxyno1");
+          const proxy2Info = await eos.getAccount("totaproxyno2");
+          const producerList = await eos.getProducers(true, "", 21);
           const producers1 = proxy1Info["voter_info"]["producers"];
           const array1 = [];
           for (const i of producers1) {
@@ -109,6 +109,8 @@ class Landing extends Component {
   }
 
   getNewPermissions = async (accountName) => {
+    const scatter = ScatterJS.scatter;
+    const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${accountName}@owner`] } );
     const account = await eos.getAccount(accountName);
     const perms = JSON.parse(JSON.stringify(account.permissions));
     let shouldUpdate = true;
@@ -137,7 +139,7 @@ class Landing extends Component {
       try {
         ScatterJS.plugins(new ScatterEOS());
         const scatter = ScatterJS.scatter;
-        const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${this.props.account.name}@${this.props.account.authority}`] } );
+        const eos = scatter.eos( scatterNetwork, Eos, { authorization: [`${accountName}@${this.props.account.authority}`] } );
         const updateAuthResult = await eos.transaction(tr => {
           for(const perm of perms) {
             if(perm.perm_name === this.props.account.authority) {

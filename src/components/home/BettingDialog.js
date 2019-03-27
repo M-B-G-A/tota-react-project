@@ -3,7 +3,7 @@ import { Modal, Button, Form, FormGroup, FormControl, HelpBlock, ControlLabel } 
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import Eos from "eosjs";
-import { scatterNetwork } from "../../apis/scatter";
+import { scatterNetwork } from "../../config/scatter";
 import { CommonUtil } from "../../utils";
 import { FormattedHTMLMessage } from "react-intl";
 
